@@ -1,0 +1,8 @@
+{
+    "config": {
+        "root": "D:/Project - OtaWilma - API/storage/config"
+    },
+    "themes": {
+        "root": "D:/Project - OtaWilma - API/storage/themes"
+    }
+}

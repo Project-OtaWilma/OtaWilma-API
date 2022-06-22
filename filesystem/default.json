@@ -1,0 +1,18 @@
+{
+    "defaultConfig": {
+        "frontpage": {
+            "main": "SCHEDULE",
+            "bottom-left": "NONE",
+            "bottom-right": "GRADES",
+            "right-top": "NEWS",
+            "right-bottom": "MESSAGES"
+        },
+        "current-theme": {
+            "id": "light"
+        },
+        "themes": []
+    },
+    "defaultTheme": {
+        
+    }
+}
