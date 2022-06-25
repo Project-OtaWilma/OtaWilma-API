@@ -1,0 +1,33 @@
+{
+    "colors": {
+        "--accent-main": "rgba(0, 51, 102, 1)",
+        "--background-main": "rgba(255, 255, 255, 1)",
+        "--background-darker": "rgba(239, 240, 243, 1)",
+        "--background-darker-hover": "rgba(239, 240, 243, 1)",
+        "--font-h1": "rgba(0, 51, 102, 1)",
+        "--font-h2": "rgba(23, 23, 23, 1)",
+        "--font-h3": "rgba(223, 223, 223, 1)",
+        "--font-h4": "rgba(23, 23, 23, 1)",
+        "--font-h5": "rgba(255, 255, 255, 1)",
+        "--border-main": "rgba(239, 240, 243, 1)",
+        "--border-darker": "rgba(229, 220, 223, 1)",
+        "--shadow-main": "rgba(0, 0, 0, 0.16)",
+        "--shadow-darker": "rgba(0, 0, 0, 0.3)",
+        "--schedule-main": "rgba(166, 202, 240, 1)",
+        "--login-main": "rgba(77, 133, 0, 1)",
+        "--login-lighter": "rgba(41, 163, 41, 1)",
+        "--error": "rgba(213, 50, 50, 1)"
+    },
+    "background": {
+        "url": "",
+        "blur": 0,
+        "opacity": 100,
+        "brightness": 120,
+        "contrast": 100,
+        "saturate": 100,
+        "grayscale": 0,
+        "sepia": 0,
+        "hue-rotate": 0,
+        "invert": 0
+    }
+}

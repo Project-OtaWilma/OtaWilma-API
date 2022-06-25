@@ -5,7 +5,6 @@ const shortid = require('shortid');
 
 const sessions = require('./routers/sessions');
 const themes = require('./routers/themes');
-const fileManager = require('./filesystem/file-manager');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+
 
 // Routers
 app.use('/api', sessions);

@@ -1,17 +1,29 @@
 const Joi = require('joi');
 
 
-
-
-
 const configGet = Joi.object({
     hash: Joi.string().required().length(24)
+});
+
+const configEditBody = Joi.object({
+    key: Joi.string().required().valid('main', 'bottom-left', 'bottom-right', 'right-top', 'right-bottom'),
+    value: Joi.string().required().valid('SCHEDULE', 'NONE', 'GRADES', 'NEWS', 'MESSAGES')
+})
+
+const configSetBody = Joi.object({
+    theme: Joi.string().required().max(12)
 });
 
 const themeGet = Joi.object({
     hash: Joi.string().required().length(24),
     id: Joi.string().required()
 });
+
+const themePostBody = Joi.object({
+    key: Joi.string().max(128).required(),
+    value: Joi.string().max(128).required().allow('')
+});
+
 
 
 const validateRequestParameters = (req, res, schema = {}) => {
@@ -42,6 +54,9 @@ module.exports = {
     },
     schemas: {
         configGet,
-        themeGet
+        configEditBody,
+        configSetBody,
+        themeGet,
+        themePostBody
     }
 }

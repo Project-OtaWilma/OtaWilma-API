@@ -5,25 +5,27 @@ const crypto = require('crypto');
 
 const { themes, config } = require('../config.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
+const { stringify } = require('querystring');
 
 const createConfig = () => {
     return new Promise((resolve, reject) => {
         generateSessionHash()
-        .then(hash => {
+            .then(hash => {
 
-            const PATH = path.join(config.root, `${hash}.json`);
+                const PATH = path.join(config.root, `${hash}.json`);
 
-            fs.writeFile(PATH, JSON.stringify(defaultConfig), {}, (err) => {
-                if(err) {
-                    return reject({err: 'failed to create config file', error: 500})
-                }
+                fs.writeFile(PATH, JSON.stringify(defaultConfig), {}, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'failed to create config file', error: 500 })
+                    }
 
-                return resolve(hash);
+                    return resolve(hash);
+                })
             })
-        })
-        .catch(() => {
-            return reject({err: 'failed to generate secure hash', error: 500});
-        })
+            .catch(() => {
+                return reject({ err: 'failed to generate secure hash', error: 500 });
+            })
     });
 }
 
@@ -32,62 +34,222 @@ const getConfig = (hash) => {
         const PATH = path.join(config.root, `${hash}.json`);
 
         fs.readFile(PATH, {}, (err, buffer) => {
-            if(err) {
-                switch(err.code) {
-                    case 'ENOENT': 
-                        return reject({err: "Couldn't locate config with specified hash", error: 404});
+            if (err) {
+                switch (err.code) {
+                    case 'ENOENT':
+                        return reject({ err: "Couldn't locate config with specified hash", error: 400 });
                     default:
-                        return reject({err: 'failed to read config file', error: 500})
+                        console.log(err);
+                        return reject({ err: 'failed to read config file', error: 500 })
                 }
             }
 
             const data = JSON.parse(buffer);
             return resolve(data);
         });
+    });
+}
+
+const editConfigFrontpage = (hash, update = { key: String, value: String }) => {
+    return new Promise((resolve, reject) => {
+        const PATH = path.join(config.root, `${hash}.json`);
+
+        getConfig(hash)
+            .then(data => {
+                const keys = Object.keys(data['frontpage']);
+
+                if (!keys.includes(update.key)) {
+                    return reject({ err: `Config file doesn't contain the field "${update.key}"`, error: 400 });
+                }
+
+                data['frontpage'][update.key] = update.value;
+
+                fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'failed to update config file', error: 500 })
+                    }
+
+                    return resolve({ success: true });
+                })
+            })
+            .catch(err => {
+                return reject(err);
+            });
+    });
+}
+
+const setConfigTheme = (hash, theme) => {
+    return new Promise((resolve, reject) => {
+        const PATH = path.join(config.root, `${hash}.json`);
+
+        getConfig(hash)
+            .then(data => {
+                const themes = data['themes'];
+                const defaults = ['light', 'dark']
+
+                if (!themes.includes(theme) && !defaults.includes(theme)) {
+                    return reject({ err: `Couldn't update theme - "${theme}" doesn't exist`, error: 400 });
+                }
+
+                data['current-theme'] = theme;
+
+                fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'failed to update your current theme', error: 500 })
+                    }
+
+                    return resolve({ success: true });
+                })
+            })
+            .catch(err => {
+                return reject(err);
+            });
     });
 }
 
 const createTheme = (hash) => {
     return new Promise((resolve, reject) => {
-        const id = shortid.generate();
-    
-        const PATH = path.join(themes.root, `${hash}.${id}.json`);
-    
-        fs.writeFile(PATH, JSON.stringify(defaultTheme), {}, (err) => {
-            if(err) {
-                return reject({err: 'failed to create config file', error: 500})
-            }
-    
-            return resolve(id);
-        })
+        getConfig(hash)
+            .then(data => {
+
+                const id = shortid.generate();
+                const themePath = path.join(themes.root, `${hash}.${id}.json`);
+                const configPath = path.join(config.root, `${hash}.json`);
+
+
+                data['themes'].push(id);
+
+                fs.writeFile(themePath, JSON.stringify(defaultTheme), {}, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'failed to create theme file', error: 500 })
+                    }
+
+                    fs.writeFile(configPath, JSON.stringify(data), {}, (err) => {
+                        if (err) {
+                            console.log(err);
+                            return reject({ err: 'failed to update config file', error: 500 })
+                        }
+
+                        return resolve(id);
+                    })
+
+                });
+            })
+            .catch(err => {
+                return reject(err);
+            });
     })
 }
 
 const getTheme = (hash, id) => {
     return new Promise((resolve, reject) => {
-        const PATH = path.join(themes.root, `${hash}.${id}.json`);
+        const defaults = ['light', 'dark'];
+
+        const PATH = defaults.includes(id) ? path.join(themes.defaults, `${id}.json`) : path.join(themes.root, `${hash}.${id}.json`);
 
         fs.readFile(PATH, {}, (err, buffer) => {
-            if(err) {
-                switch(err.code) {
-                    case 'ENOENT': 
-                        return reject({err: "Couldn't locate theme with specified hash", error: 404});
+            if (err) {
+                switch (err.code) {
+                    case 'ENOENT':
+                        return reject({ err: "Couldn't locate theme with specified hash", error: 404 });
                     default:
-                        return reject({err: 'failed to read theme file', error: 500})
+                        console.log(err);
+                        return reject({ err: 'failed to read theme file', error: 500 })
                 }
             }
 
             const data = JSON.parse(buffer);
             return resolve(data);
         });
+
     });
 }
+
+const listThemes = (hash) => {
+    return new Promise((resolve, reject) => {
+        const defaults = ['light', 'dark'];
+        const fields =
+            [
+                '--accent-main',
+                '--background-main',
+                '--background-darker',
+                '--font-h1',
+                '--font-h2',
+                '--font-h3'
+            ]
+        const list = [];
+
+        getConfig(hash)
+            .then(async (data) => {
+                const current = data['current-theme'];
+                const themes = defaults.concat(data['themes']);
+
+                for (let i = 0; i < themes.length; i++) {
+                    const id = themes[i];
+
+                    const theme = await getTheme(hash, id).catch(err => {
+                        return reject(err);
+                    })
+
+                    const preview = { id: id, default: defaults.includes(id), current: false }
+
+                    fields.forEach(key => {
+                        preview[key] = theme['colors'][key];
+                    });
+
+                    if (id == current) { preview.current = true; }
+
+                    list.push(preview);
+                }
+
+                return resolve(list);
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    });
+}
+
+const editTheme = (hash, id, root, update = { key: String, value: String }) => {
+    return new Promise((resolve, reject) => {
+        const PATH = path.join(themes.root, `${hash}.${id}.json`);
+
+        getTheme(hash, id)
+            .then(data => {
+                const keys = Object.keys(data[root]);
+
+                if (!keys.includes(update.key)) {
+                    return reject({ err: `Theme file doesn't contain the field "${update.key}"`, error: 400 });
+                }
+
+                data[root][update.key] = update.value;
+                console.log(data);
+
+                fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'failed to update theme file', error: 500 })
+                    }
+
+                    return resolve({ success: true });
+                })
+            })
+            .catch(err => {
+                return reject(err);
+            });
+    });
+}
+
 
 
 const generateSessionHash = () => {
     return new Promise((resolve, reject) => {
         crypto.randomBytes(12, (err, buffer) => {
-            if(err) {
+            if (err) {
+                console.log(err);
                 return reject(err);
             }
 
@@ -99,6 +261,11 @@ const generateSessionHash = () => {
 module.exports = {
     createConfig,
     getConfig,
+    editConfigFrontpage,
+    setConfigTheme,
+    editConfigFrontpage,
     createTheme,
-    getTheme
+    getTheme,
+    listThemes,
+    editTheme
 }

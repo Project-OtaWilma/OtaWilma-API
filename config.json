@@ -1,8 +1,9 @@
 {
     "config": {
-        "root": "D:/Project - OtaWilma - API/storage/config"
+        "root": "./storage/config"
     },
     "themes": {
-        "root": "D:/Project - OtaWilma - API/storage/themes"
+        "root": "./storage/themes",
+        "defaults": "./storage/static"
     }
 }
