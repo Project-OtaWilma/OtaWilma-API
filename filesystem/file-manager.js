@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const { themes, config } = require('../config.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
-const { stringify } = require('querystring');
+
 
 const createConfig = () => {
     return new Promise((resolve, reject) => {
@@ -17,14 +17,14 @@ const createConfig = () => {
                 fs.writeFile(PATH, JSON.stringify(defaultConfig), {}, (err) => {
                     if (err) {
                         console.log(err);
-                        return reject({ err: 'failed to create config file', error: 500 })
+                        return reject({ err: 'failed to create config file', status: 500 })
                     }
 
                     return resolve(hash);
                 })
             })
             .catch(() => {
-                return reject({ err: 'failed to generate secure hash', error: 500 });
+                return reject({ err: 'failed to generate secure hash', status: 500 });
             })
     });
 }
@@ -37,10 +37,9 @@ const getConfig = (hash) => {
             if (err) {
                 switch (err.code) {
                     case 'ENOENT':
-                        return reject({ err: "Couldn't locate config with specified hash", error: 400 });
+                        return reject({ err: "Couldn't locate config with specified hash", status: 400 });
                     default:
-                        console.log(err);
-                        return reject({ err: 'failed to read config file', error: 500 })
+                        return reject({ err: 'failed to read config file', status: 500 })
                 }
             }
 
@@ -59,7 +58,7 @@ const editConfigFrontpage = (hash, update = { key: String, value: String }) => {
                 const keys = Object.keys(data['frontpage']);
 
                 if (!keys.includes(update.key)) {
-                    return reject({ err: `Config file doesn't contain the field "${update.key}"`, error: 400 });
+                    return reject({ err: `Config file doesn't contain the field "${update.key}"`, status: 400 });
                 }
 
                 data['frontpage'][update.key] = update.value;
@@ -67,7 +66,7 @@ const editConfigFrontpage = (hash, update = { key: String, value: String }) => {
                 fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
                     if (err) {
                         console.log(err);
-                        return reject({ err: 'failed to update config file', error: 500 })
+                        return reject({ err: 'failed to update config file', status: 500 })
                     }
 
                     return resolve({ success: true });
@@ -89,7 +88,7 @@ const setConfigTheme = (hash, theme) => {
                 const defaults = ['light', 'dark']
 
                 if (!themes.includes(theme) && !defaults.includes(theme)) {
-                    return reject({ err: `Couldn't update theme - "${theme}" doesn't exist`, error: 400 });
+                    return reject({ err: `Couldn't update theme - "${theme}" doesn't exist`, status: 400 });
                 }
 
                 data['current-theme'] = theme;
@@ -97,7 +96,7 @@ const setConfigTheme = (hash, theme) => {
                 fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
                     if (err) {
                         console.log(err);
-                        return reject({ err: 'failed to update your current theme', error: 500 })
+                        return reject({ err: 'failed to update your current theme', status: 500 })
                     }
 
                     return resolve({ success: true });
@@ -124,13 +123,13 @@ const createTheme = (hash) => {
                 fs.writeFile(themePath, JSON.stringify(defaultTheme), {}, (err) => {
                     if (err) {
                         console.log(err);
-                        return reject({ err: 'failed to create theme file', error: 500 })
+                        return reject({ err: 'failed to create theme file', status: 500 })
                     }
 
                     fs.writeFile(configPath, JSON.stringify(data), {}, (err) => {
                         if (err) {
                             console.log(err);
-                            return reject({ err: 'failed to update config file', error: 500 })
+                            return reject({ err: 'failed to update config file', status: 500 })
                         }
 
                         return resolve(id);
@@ -154,10 +153,10 @@ const getTheme = (hash, id) => {
             if (err) {
                 switch (err.code) {
                     case 'ENOENT':
-                        return reject({ err: "Couldn't locate theme with specified hash", error: 404 });
+                        return reject({ err: "Couldn't locate theme with specified hash", status: 400 });
                     default:
                         console.log(err);
-                        return reject({ err: 'failed to read theme file', error: 500 })
+                        return reject({ err: 'failed to read theme file', status: 500 })
                 }
             }
 
@@ -222,7 +221,7 @@ const editTheme = (hash, id, root, update = { key: String, value: String }) => {
                 const keys = Object.keys(data[root]);
 
                 if (!keys.includes(update.key)) {
-                    return reject({ err: `Theme file doesn't contain the field "${update.key}"`, error: 400 });
+                    return reject({ err: `Theme file doesn't contain the field "${update.key}"`, status: 400 });
                 }
 
                 data[root][update.key] = update.value;
@@ -231,7 +230,7 @@ const editTheme = (hash, id, root, update = { key: String, value: String }) => {
                 fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
                     if (err) {
                         console.log(err);
-                        return reject({ err: 'failed to update theme file', error: 500 })
+                        return reject({ err: 'failed to update theme file', status: 500 })
                     }
 
                     return resolve({ success: true });

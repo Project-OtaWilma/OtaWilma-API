@@ -9,7 +9,7 @@ router.post('/sessions/config/create', (req, res) => {
             return res.json({ session: hash });
         })
         .catch(err => {
-            return res.status(err.error).json(err);
+            return res.status(err.status).json(err);
         })
 });
 
@@ -24,7 +24,7 @@ router.get('/sessions/config/get/:hash', (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.error).json(err);
+            return res.status(err.status).json(err);
         })
 });
 
@@ -40,7 +40,7 @@ router.post('/sessions/config/frontpage/edit/:hash', (req, res) => {
             return res.json(status);
         })
         .catch(err => {
-            return res.status(err.error).json(err);
+            return res.status(err.status).json(err);
         })
 });
 
@@ -56,7 +56,7 @@ router.post('/sessions/config/current-theme/set/:hash', (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.error).json(err);
+            return res.status(err.status).json(err);
         })
 });
 

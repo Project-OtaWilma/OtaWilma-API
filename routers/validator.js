@@ -29,7 +29,7 @@ const themePostBody = Joi.object({
 const validateRequestParameters = (req, res, schema = {}) => {
     const result = schema.validate(req.params);
     if (result.error) {
-        res.status(400).send({ err: result.error.details[0].message });
+        res.status(400).send({ err: result.error.details[0].message, status: 400 });
         return null;
     }
 
@@ -40,7 +40,7 @@ const validateRequestBody = (req, res, schema = {}) => {
     const result = schema.validate(req.body);
 
     if (result.error) {
-        res.status(400).send({ err: result.error.details[0].message });
+        res.status(400).send({ err: result.error.details[0].message, status: 400 });
         return null;
     }
 
