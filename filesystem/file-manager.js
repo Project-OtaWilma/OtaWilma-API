@@ -37,7 +37,7 @@ const getConfig = (hash) => {
             if (err) {
                 switch (err.code) {
                     case 'ENOENT':
-                        return reject({ err: "Couldn't locate config with specified hash", status: 400 });
+                        return reject({ err: "Couldn't locate config with specified hash", status: 401 });
                     default:
                         return reject({ err: 'failed to read config file', status: 500 })
                 }
@@ -153,7 +153,7 @@ const getTheme = (hash, id) => {
             if (err) {
                 switch (err.code) {
                     case 'ENOENT':
-                        return reject({ err: "Couldn't locate theme with specified hash", status: 400 });
+                        return reject({ err: "Couldn't locate theme with specified hash", status: 401 });
                     default:
                         console.log(err);
                         return reject({ err: 'failed to read theme file', status: 500 })
