@@ -172,12 +172,24 @@ const listThemes = (hash) => {
         const defaults = ['light', 'dark'];
         const fields =
             [
-                '--accent-main',
-                '--background-main',
-                '--background-darker',
-                '--font-h1',
-                '--font-h2',
-                '--font-h3'
+                {root: 'colors', key: '--accent-main'},
+                {root: 'colors', key: '--background-main'},
+                {root: 'colors', key: '--background-darker'},
+                {root: 'colors', key: '--font-h1'},
+                {root: 'colors', key: '--font-h2'},
+                {root: 'colors', key: '--font-h3'},
+                {root: 'colors', key: '--shadow-main'},
+                {root: 'background', key: 'url'},
+                {root: 'background', key: 'blur'},
+                {root: 'background', key: 'opacity'},
+                {root: 'background', key: 'brightness'},
+                {root: 'background', key: 'contrast'},
+                {root: 'background', key: 'saturate'},
+                {root: 'background', key: 'grayscale'},
+                {root: 'background', key: 'sepia'},
+                {root: 'background', key: 'sepia'},
+                {root: 'background', key: 'hue-rotate'},
+                {root: 'background', key: 'invert'},
             ]
         const list = [];
 
@@ -195,8 +207,10 @@ const listThemes = (hash) => {
 
                     const preview = { id: id, default: defaults.includes(id), current: false }
 
-                    fields.forEach(key => {
-                        preview[key] = theme['colors'][key];
+                    fields.forEach(field => {
+                        if(!preview[field.root]) { preview[field.root] = {}; }
+                        
+                        preview[field.root][field.key] = theme[field.root][field.key];
                     });
 
                     if (id == current) { preview.current = true; }

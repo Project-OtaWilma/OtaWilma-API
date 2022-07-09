@@ -3,7 +3,6 @@
         "--accent-main": "rgba(32, 74, 135, 1)",
         "--background-main": "rgba(15, 15, 15, 1)",
         "--background-darker": "rgba(10, 10, 10, 1)",
-        "--background-darker-hover": "rgba(239, 240, 243, 1)",
         "--font-h1": "rgba(52, 101, 164, 1)",
         "--font-h2": "rgba(165, 235, 255, 1)",
         "--font-h3": "rgba(211, 215, 207, 0.5)",
