@@ -1,9 +1,10 @@
 const crypto = require('crypto');
 const { MongoClient } = require('mongodb');
-const { url } = require('./config.json');
+const { user, password, host, port } = require('./secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
-const { resolve } = require('path');
+
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
 
 const createConfig = () => {
     return new Promise((resolve, reject) => {
@@ -11,7 +12,9 @@ const createConfig = () => {
         generateSessionHash()
             .then(hash => {
                 MongoClient.connect(url, (err, database) => {
-                    if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+                    if (err) {
+                        return reject({ err: 'Failed to connect to database', status: 500 });
+                    }
 
                     const db = database.db('OtaWilma');
 
@@ -19,7 +22,10 @@ const createConfig = () => {
                     config['hash'] = hash;
 
                     db.collection('configuration').insertOne(config, (err, res) => {
-                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+                        if (err) {
+                            console.log(err);
+                            return reject({ err: 'Failed to connect to database', status: 500 });
+                        }
 
                         database.close();
                         return resolve({ hash: hash });

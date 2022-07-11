@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { schemas, validators } = require('./validator');
-const { getTheme, listThemes, editTheme } = require('../filesystem/file-manager');
 const { theme } = require('../MongoDB/database');
 
 router.post('/themes/create/:hash', (req, res) => {
@@ -72,7 +71,7 @@ router.post('/themes/edit/background/:hash/:id', (req, res) => {
     const body = validators.validateRequestBody(req, res, schemas.themePostBody);
     if (!body) return;
 
-    editTheme(params.hash, params.id, 'background', { key: body.key, value: body.value })
+    theme.editTheme(params.hash, params.id, 'background', { key: body.key, value: body.value })
         .then(status => {
             return res.json(status);
         })

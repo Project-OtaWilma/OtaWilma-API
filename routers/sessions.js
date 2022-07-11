@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { schemas, validators } = require('./validator');
-const { setConfigTheme } = require('../filesystem/file-manager');
 const { config } = require('../MongoDB/database');
 
 router.post('/sessions/config/create', (req, res) => {
