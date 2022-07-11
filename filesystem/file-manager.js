@@ -4,79 +4,8 @@ const shortid = require('shortid');
 const crypto = require('crypto');
 
 const { themes, config } = require('../config.json');
-const { defaultConfig, defaultTheme } = require('./default.json');
+// const { defaultConfig, defaultTheme } = require('./default.json');
 
-
-const createConfig = () => {
-    return new Promise((resolve, reject) => {
-        generateSessionHash()
-            .then(hash => {
-
-                const PATH = path.join(config.root, `${hash}.json`);
-
-                fs.writeFile(PATH, JSON.stringify(defaultConfig), {}, (err) => {
-                    if (err) {
-                        console.log(err);
-                        return reject({ err: 'failed to create config file', status: 500 })
-                    }
-
-                    return resolve(hash);
-                })
-            })
-            .catch(() => {
-                return reject({ err: 'failed to generate secure hash', status: 500 });
-            })
-    });
-}
-
-const getConfig = (hash) => {
-    return new Promise((resolve, reject) => {
-        const PATH = path.join(config.root, `${hash}.json`);
-
-        fs.readFile(PATH, {}, (err, buffer) => {
-            if (err) {
-                switch (err.code) {
-                    case 'ENOENT':
-                        return reject({ err: "Couldn't locate config with specified hash", status: 401 });
-                    default:
-                        return reject({ err: 'failed to read config file', status: 500 })
-                }
-            }
-
-            const data = JSON.parse(buffer);
-            return resolve(data);
-        });
-    });
-}
-
-const editConfigFrontpage = (hash, update = { key: String, value: String }) => {
-    return new Promise((resolve, reject) => {
-        const PATH = path.join(config.root, `${hash}.json`);
-
-        getConfig(hash)
-            .then(data => {
-                const keys = Object.keys(data['frontpage']);
-
-                if (!keys.includes(update.key)) {
-                    return reject({ err: `Config file doesn't contain the field "${update.key}"`, status: 400 });
-                }
-
-                data['frontpage'][update.key] = update.value;
-
-                fs.writeFile(PATH, JSON.stringify(data), {}, (err) => {
-                    if (err) {
-                        console.log(err);
-                        return reject({ err: 'failed to update config file', status: 500 })
-                    }
-
-                    return resolve({ success: true });
-                })
-            })
-            .catch(err => {
-                return reject(err);
-            });
-    });
-}
 
 const setConfigTheme = (hash, theme) => {
     return new Promise((resolve, reject) => {
@@ -172,24 +101,24 @@ const listThemes = (hash) => {
         const defaults = ['light', 'dark'];
         const fields =
             [
-                {root: 'colors', key: '--accent-main'},
-                {root: 'colors', key: '--background-main'},
-                {root: 'colors', key: '--background-darker'},
-                {root: 'colors', key: '--font-h1'},
-                {root: 'colors', key: '--font-h2'},
-                {root: 'colors', key: '--font-h3'},
-                {root: 'colors', key: '--shadow-main'},
-                {root: 'background', key: 'url'},
-                {root: 'background', key: 'blur'},
-                {root: 'background', key: 'opacity'},
-                {root: 'background', key: 'brightness'},
-                {root: 'background', key: 'contrast'},
-                {root: 'background', key: 'saturate'},
-                {root: 'background', key: 'grayscale'},
-                {root: 'background', key: 'sepia'},
-                {root: 'background', key: 'sepia'},
-                {root: 'background', key: 'hue-rotate'},
-                {root: 'background', key: 'invert'},
+                { root: 'colors', key: '--accent-main' },
+                { root: 'colors', key: '--background-main' },
+                { root: 'colors', key: '--background-darker' },
+                { root: 'colors', key: '--font-h1' },
+                { root: 'colors', key: '--font-h2' },
+                { root: 'colors', key: '--font-h3' },
+                { root: 'colors', key: '--shadow-main' },
+                { root: 'background', key: 'url' },
+                { root: 'background', key: 'blur' },
+                { root: 'background', key: 'opacity' },
+                { root: 'background', key: 'brightness' },
+                { root: 'background', key: 'contrast' },
+                { root: 'background', key: 'saturate' },
+                { root: 'background', key: 'grayscale' },
+                { root: 'background', key: 'sepia' },
+                { root: 'background', key: 'sepia' },
+                { root: 'background', key: 'hue-rotate' },
+                { root: 'background', key: 'invert' },
             ]
         const list = [];
 
@@ -208,8 +137,8 @@ const listThemes = (hash) => {
                     const preview = { id: id, default: defaults.includes(id), current: false }
 
                     fields.forEach(field => {
-                        if(!preview[field.root]) { preview[field.root] = {}; }
-                        
+                        if (!preview[field.root]) { preview[field.root] = {}; }
+
                         preview[field.root][field.key] = theme[field.root][field.key];
                     });
 
@@ -272,11 +201,7 @@ const generateSessionHash = () => {
 }
 
 module.exports = {
-    createConfig,
-    getConfig,
-    editConfigFrontpage,
     setConfigTheme,
-    editConfigFrontpage,
     createTheme,
     getTheme,
     listThemes,

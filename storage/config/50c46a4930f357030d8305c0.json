@@ -1,1 +1,13 @@
-{"frontpage":{"main":"SCHEDULE","bottom-left":"NONE","bottom-right":"GRADES","right-top":"NEWS","right-bottom":"MESSAGES"},"current-theme":"light","themes":["45U8hUsKj"]}
+{
+    "frontpage": {
+        "main": "SCHEDULE",
+        "bottom-left": "NONE",
+        "bottom-right": "GRADES",
+        "right-top": "NEWS",
+        "right-bottom": "MESSAGES"
+    },
+    "current-theme": "light",
+    "themes": [
+        "45U8hUsKj"
+    ]
+}
