@@ -21,7 +21,7 @@ const themeGet = Joi.object({
 
 const themePostBody = Joi.object({
     key: Joi.string().max(128).required(),
-    value: Joi.string().max(128).required().allow('')
+    value: Joi.string().max(1024).required().allow('')
 });
 
 

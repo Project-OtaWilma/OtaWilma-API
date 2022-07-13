@@ -24,10 +24,6 @@
                 "type": "color",
                 "value": "rgba(239, 240, 243, 1)"
             },
-            "--background-darker-hover": {
-                "type": "color",
-                "value": "rgba(239, 240, 243, 1)"
-            },
             "--font-h1": {
                 "type": "color",
                 "value": "rgba(0, 51, 102, 1)"
@@ -67,6 +63,62 @@
             "--schedule-main": {
                 "type": "color",
                 "value": "rgba(166, 202, 240, 1)"
+            },
+            "--schedule-h1": {
+                "type": "color",
+                "value": "rgba(16, 16, 16, 1, 1)"
+            },
+            "--L2021-mandatory-main": {
+                "type": "color",
+                "value": "rgba(191, 255, 191, 1)"
+            },
+            "--L2021-mandatory-selected": {
+                "type": "color",
+                "value": "rgba(38, 102, 38, 1)"
+            },
+            "--L2021-g-optional-main": {
+                "type": "color",
+                "value": "rgba(128, 255, 255, 1)"
+            },
+            "--L2021-g-optional-selected": {
+                "type": "color",
+                "value": "rgba(0, 102, 102, 1)"
+            },
+            "--L2021-l-optional-main": {
+                "type": "color",
+                "value": "rgba(128, 128, 192, 1)"
+            },
+            "--L2021-l-optional-selected": {
+                "type": "color",
+                "value": "rgba(0, 0, 39, 1)"
+            },
+            "--L2021-diploma-main": {
+                "type": "color",
+                "value": "rgba(191, 191, 255, 1)"
+            },
+            "--L2021-diploma-selected": {
+                "type": "color",
+                "value": "rgba(0, 0, 155, 1)"
+            },
+            "--L2016-l-optional-main": {
+                "type": "color",
+                "value": "rgba(232, 232, 255, 1)"
+            },
+            " --L2016-l-optional-selected": {
+                "type": "color",
+                "value": "rgba(79, 79, 102, 1)"
+            },
+            "--L2016-g-optional-main": {
+                "type": "color",
+                "value": "rgba(255, 193, 193, 1)"
+            },
+            "--L2016-g-optional-selected": {
+                "type": "color",
+                "value": "rgba(102, 40, 40, 1)"
+            },
+            "--course-tray-h1": {
+                "type": "color",
+                "value": "rgba(16, 16, 16, 1)"
             },
             "--login-main": {
                 "type": "color",
@@ -119,6 +171,10 @@
                 "value": 0
             },
             "invert": {
+                "type": "number",
+                "value": 0
+            },
+            "rounded-edges": {
                 "type": "number",
                 "value": 0
             }

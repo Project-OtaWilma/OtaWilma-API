@@ -13,6 +13,7 @@ router.post('/themes/create/:hash', (req, res) => {
             return res.json({ session: hash });
         })
         .catch(err => {
+            console.log(err);
             return res.status(err.status).json(err);
         })
 });
@@ -27,6 +28,7 @@ router.get('/themes/get/:hash/:id', (req, res) => {
             return res.json(config);
         })
         .catch(err => {
+            console.log(err);
             return res.status(err.status).json(err);
         })
 });
@@ -45,6 +47,7 @@ router.get('/themes/list/:hash', (req, res) => {
             console.log(err);
             return res.status(err.status).json(err);
         })
+
 });
 
 router.post('/themes/edit/colors/:hash/:id', (req, res) => {

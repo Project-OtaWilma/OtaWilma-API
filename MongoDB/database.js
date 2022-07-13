@@ -136,47 +136,13 @@ const getTheme = (hash, id) => {
 
 const listThemes = (hash) => {
     return new Promise((resolve, reject) => {
-        const fields =
-            [
-                { root: 'colors', key: '--accent-main' },
-                { root: 'colors', key: '--background-main' },
-                { root: 'colors', key: '--background-darker' },
-                { root: 'colors', key: '--font-h1' },
-                { root: 'colors', key: '--font-h2' },
-                { root: 'colors', key: '--font-h3' },
-                { root: 'colors', key: '--shadow-main' },
-                { root: 'background', key: 'url' },
-                { root: 'background', key: 'blur' },
-                { root: 'background', key: 'opacity' },
-                { root: 'background', key: 'brightness' },
-                { root: 'background', key: 'contrast' },
-                { root: 'background', key: 'saturate' },
-                { root: 'background', key: 'grayscale' },
-                { root: 'background', key: 'sepia' },
-                { root: 'background', key: 'sepia' },
-                { root: 'background', key: 'hue-rotate' },
-                { root: 'background', key: 'invert' },
-            ]
 
         getConfig(hash)
             .then(async (config) => {
-                const result = {};
-                for (let i = 0; i < config['themes'].length; i++) {
-                    const id = config['themes'][i];
+                const themes = [...config['themes'], ...['light', 'dark']];
 
-                    const theme = await getTheme(hash, id)
-                        .catch(err => {
-                            return reject(err);
-                        })
-
-                    result[id] = {};
-
-                    fields.forEach(field => {
-                        result[id][field.key] = theme[field.root][field.key];
-                    })
-                }
-
-                return resolve(result);
+                return resolve(themes);
+                
             })
             .catch(err => {
                 return reject(err);
