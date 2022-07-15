@@ -14,6 +14,10 @@ const configSetBody = Joi.object({
     theme: Joi.string().required().max(12)
 });
 
+const themeGetDefault = Joi.object({
+    id: Joi.string().required()
+});
+
 const themeGet = Joi.object({
     hash: Joi.string().required().length(24),
     id: Joi.string().required()
@@ -56,6 +60,7 @@ module.exports = {
         configGet,
         configEditBody,
         configSetBody,
+        themeGetDefault,
         themeGet,
         themePostBody
     }

@@ -18,6 +18,21 @@ router.post('/themes/create/:hash', (req, res) => {
         })
 });
 
+router.get('/themes/defaults/get/:id', (req, res) => {
+    const request = validators.validateRequestParameters(req, res, schemas.themeGetDefault);
+
+    if (!request) return;
+
+    theme.getDefaultTheme(request.id)
+        .then(config => {
+            return res.json(config);
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(err.status).json(err);
+        })
+});
+
 router.get('/themes/get/:hash/:id', (req, res) => {
     const request = validators.validateRequestParameters(req, res, schemas.themeGet);
 

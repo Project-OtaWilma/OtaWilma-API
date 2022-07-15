@@ -102,6 +102,33 @@ const createTheme = (hash) => {
     })
 }
 
+const getDefaultTheme = (id) => {
+    return new Promise((resolve, reject) => {
+
+        const themes = ['light', 'dark'];
+
+        if (!themes.includes(id)) return reject({ err: "specified theme is not a a default theme", status: 400 })
+
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+
+            const query = { hash: id }
+
+            db.collection('themes').find(query).toArray((err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                database.close();
+
+                if (res.length < 1) return reject({ err: "This theme doesn't exists anymore, as it is likely deleted", status: 400 });
+
+                return resolve(res[0]);
+            });
+        })
+    })
+}
+
 const getTheme = (hash, id) => {
     return new Promise((resolve, reject) => {
         getConfig(hash)
@@ -292,6 +319,7 @@ module.exports = {
     },
     theme: {
         createTheme,
+        getDefaultTheme,
         getTheme,
         listThemes,
         editTheme,
