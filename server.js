@@ -6,8 +6,10 @@ const shortid = require('shortid');
 const sessions = require('./routers/sessions');
 const themes = require('./routers/themes');
 
+const { port } = require('./config.json')
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || port;
 
 
 app.use(express.json());

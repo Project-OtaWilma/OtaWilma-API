@@ -1,9 +1,3 @@
 {
-    "config": {
-        "root": "./storage/config"
-    },
-    "themes": {
-        "root": "./storage/themes",
-        "defaults": "./storage/static"
-    }
+    "port": 8302
 }
