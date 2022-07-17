@@ -1,5 +1,8 @@
 const Joi = require('joi');
 
+const configCreate = Joi.object({
+    username: Joi.string().required()
+});
 
 const configGet = Joi.object({
     hash: Joi.string().required().length(24)
@@ -57,6 +60,7 @@ module.exports = {
         validateRequestBody
     },
     schemas: {
+        configCreate,
         configGet,
         configEditBody,
         configSetBody,

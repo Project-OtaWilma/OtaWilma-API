@@ -6,7 +6,7 @@ const { generate } = require('shortid');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
 
-const createConfig = () => {
+const createConfig = (username) => {
     return new Promise((resolve, reject) => {
 
         generateSessionHash()
@@ -18,7 +18,7 @@ const createConfig = () => {
 
                     const db = database.db('OtaWilma');
 
-                    const config = { ...defaultConfig };
+                    const config = { ...{username: username}, ...defaultConfig };
                     config['hash'] = hash;
 
                     db.collection('configuration').insertOne(config, (err, res) => {

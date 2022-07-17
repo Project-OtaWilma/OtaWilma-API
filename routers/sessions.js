@@ -4,7 +4,11 @@ const { schemas, validators } = require('./validator');
 const { config } = require('../MongoDB/database');
 
 router.post('/sessions/config/create', (req, res) => {
-    config.createConfig()
+    const request = validators.validateRequestBody(req, res, schemas.configCreate);
+
+    if(!request) return
+
+    config.createConfig(request.username)
         .then(hash => {
             return res.json({ session: hash });
         })
