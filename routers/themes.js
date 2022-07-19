@@ -3,7 +3,9 @@ const router = express.Router();
 const { schemas, validators } = require('./validator');
 const { theme } = require('../MongoDB/database');
 
-router.post('/themes/create/:hash', (req, res) => {
+const limiter = require('./rate-limit');
+
+router.post('/themes/create/:hash', limiter.create, (req, res) => {
     const request = validators.validateRequestParameters(req, res, schemas.configGet);
 
     if (!request) return;
@@ -18,7 +20,7 @@ router.post('/themes/create/:hash', (req, res) => {
         })
 });
 
-router.get('/themes/defaults/get/:id', (req, res) => {
+router.get('/themes/defaults/get/:id', limiter.cacheable, (req, res) => {
     const request = validators.validateRequestParameters(req, res, schemas.themeGetDefault);
 
     if (!request) return;
@@ -99,7 +101,7 @@ router.post('/themes/edit/background/:hash/:id', (req, res) => {
         })
 });
 
-router.post('/themes/remove/:hash/:id', (req, res) => {
+router.post('/themes/remove/:hash/:id', limiter.create, (req, res) => {
     const request = validators.validateRequestParameters(req, res, schemas.themeGet);
 
     if (!request) return;

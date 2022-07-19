@@ -3,10 +3,12 @@ const router = express.Router();
 const { schemas, validators } = require('./validator');
 const { config } = require('../MongoDB/database');
 
-router.post('/sessions/config/create', (req, res) => {
+const limiter = require('./rate-limit');
+
+router.post('/sessions/config/create', limiter.strict, (req, res) => {
     const request = validators.validateRequestBody(req, res, schemas.configCreate);
 
-    if(!request) return
+    if (!request) return
 
     config.createConfig(request.username)
         .then(hash => {

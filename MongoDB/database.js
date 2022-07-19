@@ -18,7 +18,7 @@ const createConfig = (username) => {
 
                     const db = database.db('OtaWilma');
 
-                    const config = { ...{username: username}, ...defaultConfig };
+                    const config = { ...{ username: username }, ...defaultConfig };
                     config['hash'] = hash;
 
                     db.collection('configuration').insertOne(config, (err, res) => {
@@ -66,38 +66,45 @@ const getConfig = (hash) => {
 const createTheme = (hash) => {
     return new Promise((resolve, reject) => {
 
+        getConfig(hash)
+            .then(config => {
 
+                if (config.themes.length > 9) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
 
-        MongoClient.connect(url, (err, database) => {
-            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-            const db = database.db('OtaWilma');
-
-            const theme = { ...defaultTheme };
-            theme['hash'] = generate();
-
-            const query = { hash: hash }
-            const values = { $push: { themes: theme['hash'] } }
-
-            db.collection('configuration').updateOne(query, values, (err, res) => {
-                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-                if (res.matchedCount < 1) {
-                    database.close();
-                    return reject({ err: "Couldn't locate configuration with specified hash", status: 400 })
-                };
-
-                db.collection('themes').insertOne(theme, (err, res) => {
+                MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    database.close();
-                    return resolve({ hash: theme['hash'] });
-                });
+                    const db = database.db('OtaWilma');
 
-            });
+                    const theme = { ...defaultTheme };
+                    theme['hash'] = generate();
+
+                    const query = { hash: hash }
+                    const values = { $push: { themes: theme['hash'] } }
+
+                    db.collection('configuration').updateOne(query, values, (err, res) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                        if (res.matchedCount < 1) {
+                            database.close();
+                            return reject({ err: "Couldn't locate configuration with specified hash", status: 400 })
+                        };
+
+                        db.collection('themes').insertOne(theme, (err, res) => {
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                            database.close();
+                            return resolve({ hash: theme['hash'] });
+                        });
+
+                    });
 
 
-        })
+                })
+            })
+            .catch(err => {
+                return reject(err);
+            })
 
     })
 }
@@ -169,7 +176,7 @@ const listThemes = (hash) => {
                 const themes = [...config['themes'], ...['light', 'dark']];
 
                 return resolve(themes);
-                
+
             })
             .catch(err => {
                 return reject(err);
