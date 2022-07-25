@@ -226,7 +226,7 @@ const removeTheme = (hash, id) => {
         getConfig(hash)
             .then(config => {
 
-                if (!config['themes']) return reject({ err: "configuration doesn't have this theme", status: 400 })
+                if (!config['themes'].includes(id)) return reject({ err: "configuration doesn't have this theme", status: 400 })
 
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
