@@ -286,8 +286,6 @@ const editTheme = (hash, id, root, update = { key: String, value: String }) => {
 
                         database.close();
 
-                        if (res.modifiedCount < 1) return reject({ err: "Failed to modify key-value pair", status: 400 });
-
                         return resolve(res);
                     });
                 })

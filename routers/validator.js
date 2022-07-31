@@ -31,8 +31,6 @@ const themePostBody = Joi.object({
     value: Joi.string().max(1024).required().allow('')
 });
 
-
-
 const validateRequestParameters = (req, res, schema = {}) => {
     const result = schema.validate(req.params);
     if (result.error) {
