@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 
-const shortid = require('shortid');
-
 const sessions = require('./routers/sessions');
 const themes = require('./routers/themes');
 
-const { port } = require('./config.json')
+const limiter = require('./routers/rate-limit');
+
+const { port } = require('./config.json');
 
 const app = express();
 const PORT = process.env.PORT || port;
@@ -17,8 +17,8 @@ app.use(cors());
 
 
 // Routers
-app.use('/api', sessions);
-app.use('/api', themes);
+app.use('/api', sessions, limiter.standard);
+app.use('/api', themes, limiter.standard);
 
 // PORT
 app.listen(PORT, () => {
