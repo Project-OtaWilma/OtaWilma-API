@@ -3,8 +3,56 @@ const { MongoClient } = require('mongodb');
 const { user, password, host, port } = require('./secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
+const { resolve } = require('path');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+
+const login = (hash, username) => {
+    return new Promise((resolve, reject) => {
+        getConfig(hash)
+        .then(config => {
+            MongoClient.connect(url, (err, database) => {
+                if (err) {
+                    return reject({ err: 'Failed to connect to database', status: 500 });
+                }
+
+                const loginHistory = config['login-history'] ? config['login-history'] : [];
+                const date = new Date();
+
+                loginHistory.push({timeStamp: date.getTime(), username: username});
+
+                if(loginHistory.length > 5) loginHistory.shift();
+
+                const db = database.db('OtaWilma');
+
+                const query = {hash: hash}
+
+                const update = {
+                    $set: {
+                        username: username,
+                    },
+                    $set: {
+                        'login-history': loginHistory,
+                    }
+                }
+
+                db.collection('configuration').updateOne(query, update, (err, res) => {
+                    if (err) {
+                        console.log(err);
+                        return reject({ err: 'Failed to connect to database', status: 500 });
+                    }
+
+                    database.close();
+                    return resolve(res);
+                });
+
+            })
+        })
+        .catch(err => {
+            return reject(err);
+        })
+    });
+}
 
 const createConfig = (username) => {
     return new Promise((resolve, reject) => {
@@ -50,7 +98,7 @@ const getConfig = (hash) => {
 
             const query = { hash: hash }
 
-            db.collection('configuration').find(query).toArray((err, res) => {
+            db.collection('configuration').find(query).project({'_id': 0, 'login-history': 0, 'hash': 0}).toArray((err, res) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
                 database.close();
@@ -62,6 +110,38 @@ const getConfig = (hash) => {
         })
     })
 }
+
+
+const getLoginHistory = (hash) => {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+
+            const query = { hash: hash }
+            const projection = {
+                '_id': 0,
+                'username': 0,
+                'frontpage': 0,
+                'current-theme': 0,
+                'themes': 0,
+                'hash': 0
+            }
+
+            db.collection('configuration').find(query).project(projection).toArray((err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                database.close();
+
+                if (res.length < 1) return reject({ err: "Couldn't locate configuration with specified hash", status: 400 });
+
+                return resolve(res[0]);
+            });
+        })
+    })
+}
+
 
 const createTheme = (hash) => {
     return new Promise((resolve, reject) => {
@@ -318,8 +398,10 @@ const generateSessionHash = () => {
 
 module.exports = {
     config: {
+        login,
         createConfig,
         getConfig,
+        getLoginHistory,
         setTheme
     },
     theme: {

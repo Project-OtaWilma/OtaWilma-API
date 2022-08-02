@@ -1,12 +1,6 @@
 {
     "defaultConfig": {
-        "frontpage": {
-            "main": "SCHEDULE",
-            "bottom-left": "NONE",
-            "bottom-right": "GRADES",
-            "right-top": "NEWS",
-            "right-bottom": "MESSAGES"
-        },
+        "frontpage": "",
         "current-theme": "light",
         "themes": []
     },
@@ -38,7 +32,7 @@
             },
             "--font-h4": {
                 "type": "color",
-                "value": "rgba(23, 23, 23, 1)"
+                "value": "rgba(233, 233, 233, 1)"
             },
             "--font-h5": {
                 "type": "color",
@@ -148,7 +142,7 @@
             },
             "brightness": {
                 "type": "number",
-                "value": 120
+                "value": 100
             },
             "contrast": {
                 "type": "number",
