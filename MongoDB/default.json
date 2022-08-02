@@ -1,6 +1,6 @@
 {
     "defaultConfig": {
-        "frontpage": "",
+        "frontpage": "https://otawilma.tuukk.dev/assets/stylesheets/frontpage.css",
         "current-theme": "light",
         "themes": []
     },
