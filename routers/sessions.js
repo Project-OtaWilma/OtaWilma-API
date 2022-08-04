@@ -22,7 +22,7 @@ router.post('/sessions/config/login', (req, res) => {
 router.post('/sessions/config/create', limiter.strict, (req, res) => {
     const request = validators.validateRequestBody(req, res, schemas.configCreate);
 
-    if (!request) return
+    if (!request) return;
 
     config.createConfig(request.username)
         .then(hash => {

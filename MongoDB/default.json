@@ -125,6 +125,22 @@
             "--error": {
                 "type": "color",
                 "value": "rgba(213, 50, 50, 1)"
+            },
+            "--info-background": {
+                "type": "color",
+                "value": "rgba(0, 51, 102, 1)"
+            },  
+            "--clock-background": {
+                "type": "color",
+                "value": "rgba(0, 51, 102, 1)"
+            },
+            "--clock-markings": {
+                "type": "color",
+                "value": "rgba(255, 255, 255, 1)"
+            },
+            "--info-h1": {
+                "type": "color",
+                "value": "rgba(255, 255, 255, 1)"
             }
         },
         "background": {
