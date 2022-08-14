@@ -28,7 +28,7 @@
             },
             "--font-h3": {
                 "type": "color",
-                "value": "rgba(255, 255, 255, 0.33)"
+                "value": "rgba(0, 0, 0, 0.33)"
             },
             "--font-h4": {
                 "type": "color",
