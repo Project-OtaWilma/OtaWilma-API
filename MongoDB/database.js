@@ -149,7 +149,7 @@ const createTheme = (hash) => {
         getConfig(hash)
             .then(config => {
 
-                if (config.themes.length > 9) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
+                if (config.themes.length > 24) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
 
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
