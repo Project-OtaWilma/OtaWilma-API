@@ -3,9 +3,10 @@ const { MongoClient } = require('mongodb');
 const { user, password, host, port } = require('./secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
-const { resolve } = require('path');
+const {} = require('./authentication');
 
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+// const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+const url = `mongodb://localhost:27020/mydb`;
 
 const login = (hash, username) => {
     return new Promise((resolve, reject) => {
