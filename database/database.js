@@ -4,50 +4,71 @@ const { user, password, host, port } = require('./secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
 const {} = require('./authentication');
+const { resolve } = require('path');
 
 // const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://localhost:27020/mydb`;
+const url = `mongodb://localhost:27017`;
 
-const login = (hash, username) => {
+const login = (auth) => {
     return new Promise((resolve, reject) => {
-        getConfig(hash)
-        .then(config => {
-            MongoClient.connect(url, (err, database) => {
-                if (err) {
-                    return reject({ err: 'Failed to connect to database', status: 500 });
-                }
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                const loginHistory = config['login-history'] ? config['login-history'] : [];
-                const date = new Date();
+            const db = database.db('OtaWilma');
+            const query = { username: auth.username }
 
-                loginHistory.push({timeStamp: date.getTime(), username: username});
+            db.collection('user-schema').find(query).toArray((err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                if(loginHistory.length > 5) loginHistory.shift();
+                const timeStamp = (new Date()).getTime()
+                const config = res[0] ? res[0] : { ...{ username: auth.username }, ...defaultConfig, ...{joinDate: timeStamp}};
 
-                const db = database.db('OtaWilma');
+                if(config['login-history'].length >= 5) config['login-history'].shift();
+                config['login-history'].push(timeStamp);
 
-                const query = {hash: hash}
-
-                const update = {
-                    $set: {
-                        username: username,
-                    },
-                    $set: {
-                        'login-history': loginHistory,
-                    }
-                }
-
-                db.collection('configuration').updateOne(query, update, (err, res) => {
-                    if (err) {
-                        console.log(err);
-                        return reject({ err: 'Failed to connect to database', status: 500 });
-                    }
-
+                db.collection('user-schema').findOneAndReplace(query, config, {upsert: true}, (err, res) => {
                     database.close();
-                    return resolve(res);
+                    if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+    
+                    return resolve();
                 });
 
-            })
+            });
+        })
+    });
+}
+
+const getConfig = (auth) => {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+            const query = { username: auth.username }
+            const projection = {
+                '_id': 0,
+                'login-history': 0
+            }
+
+            db.collection('user-schema').find(query).project(projection).toArray((err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                database.close();
+
+                if (res.length < 1) return reject({ err: "Couldn't locate configuration with specified hash", status: 400 });
+
+                return resolve(res[0]);
+            });
+        })
+    });
+}
+
+const getLoginHistory = (auth) => {
+
+    return new Promise((resolve, reject) => {
+        getConfig(auth)
+        .then(config => {
+            return resolve(config['login-history']);
         })
         .catch(err => {
             return reject(err);
@@ -55,99 +76,10 @@ const login = (hash, username) => {
     });
 }
 
-const createConfig = (username) => {
+const createTheme = (auth) => {
     return new Promise((resolve, reject) => {
 
-        generateSessionHash()
-            .then(hash => {
-                MongoClient.connect(url, (err, database) => {
-                    if (err) {
-                        return reject({ err: 'Failed to connect to database', status: 500 });
-                    }
-
-                    const db = database.db('OtaWilma');
-
-                    const config = { ...{ username: username }, ...defaultConfig };
-                    config['hash'] = hash;
-
-                    db.collection('configuration').insertOne(config, (err, res) => {
-                        if (err) {
-                            console.log(err);
-                            return reject({ err: 'Failed to connect to database', status: 500 });
-                        }
-
-                        database.close();
-                        return resolve({ hash: hash });
-                    });
-
-                })
-            })
-            .catch(err => {
-                console.log(err);
-                return reject({ err: 'Failed to generate safe hash', status: 500 })
-            })
-
-    })
-}
-
-const getConfig = (hash) => {
-    return new Promise((resolve, reject) => {
-        MongoClient.connect(url, (err, database) => {
-            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-            const db = database.db('OtaWilma');
-
-            const query = { hash: hash }
-
-            db.collection('configuration').find(query).project({'_id': 0, 'login-history': 0, 'hash': 0}).toArray((err, res) => {
-                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-                database.close();
-
-                if (res.length < 1) return reject({ err: "Couldn't locate configuration with specified hash", status: 400 });
-
-                return resolve(res[0]);
-            });
-        })
-    })
-}
-
-
-const getLoginHistory = (hash) => {
-    return new Promise((resolve, reject) => {
-        MongoClient.connect(url, (err, database) => {
-            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-            const db = database.db('OtaWilma');
-
-            const query = { hash: hash }
-            const projection = {
-                '_id': 0,
-                'username': 0,
-                'frontpage': 0,
-                'current-theme': 0,
-                'themes': 0,
-                'hash': 0
-            }
-
-            db.collection('configuration').find(query).project(projection).toArray((err, res) => {
-                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
-                database.close();
-
-                if (res.length < 1) return reject({ err: "Couldn't locate configuration with specified hash", status: 400 });
-
-                return resolve(res[0]);
-            });
-        })
-    })
-}
-
-
-const createTheme = (hash) => {
-    return new Promise((resolve, reject) => {
-
-        getConfig(hash)
+        getConfig(auth)
             .then(config => {
 
                 if (config.themes.length > 24) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
@@ -160,10 +92,10 @@ const createTheme = (hash) => {
                     const theme = { ...defaultTheme };
                     theme['hash'] = generate();
 
-                    const query = { hash: hash }
+                    const query = { username: auth.username }
                     const values = { $push: { themes: theme['hash'] } }
 
-                    db.collection('configuration').updateOne(query, values, (err, res) => {
+                    db.collection('user-schema').updateOne(query, values, (err, res) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
                         if (res.matchedCount < 1) {
@@ -217,9 +149,9 @@ const getDefaultTheme = (id) => {
     })
 }
 
-const getTheme = (hash, id) => {
+const getTheme = (auth, id) => {
     return new Promise((resolve, reject) => {
-        getConfig(hash)
+        getConfig(auth)
             .then(config => {
                 const themes = [...config['themes'], ...['light', 'dark']];
 
@@ -249,15 +181,12 @@ const getTheme = (hash, id) => {
     })
 }
 
-const listThemes = (hash) => {
+const listThemes = (auth) => {
     return new Promise((resolve, reject) => {
 
-        getConfig(hash)
+        getConfig(auth)
             .then(async (config) => {
-                const themes = [...config['themes'], ...['light', 'dark']];
-
-                return resolve(themes);
-
+                return resolve([...config['themes'], ...['light', 'dark']]);
             })
             .catch(err => {
                 return reject(err);
@@ -266,10 +195,10 @@ const listThemes = (hash) => {
     })
 }
 
-const setTheme = (hash, id, theme) => {
+const setTheme = (auth, id) => {
     return new Promise((resolve, reject) => {
 
-        getConfig(hash)
+        getConfig(auth)
             .then(config => {
 
                 const themes = [...config['themes'], ...['light', 'dark']];
@@ -302,9 +231,9 @@ const setTheme = (hash, id, theme) => {
     })
 }
 
-const removeTheme = (hash, id) => {
+const removeTheme = (auth, id) => {
     return new Promise((resolve, reject) => {
-        getConfig(hash)
+        getConfig(auth)
             .then(config => {
 
                 if (!config['themes'].includes(id)) return reject({ err: "configuration doesn't have this theme", status: 400 })
@@ -345,9 +274,10 @@ const removeTheme = (hash, id) => {
             })
     })
 }
-const editTheme = (hash, id, root, update = { key: String, value: String }) => {
+
+const editTheme = (auth, id, root, update = { key: String, value: String }) => {
     return new Promise((resolve, reject) => {
-        getConfig(hash)
+        getConfig(auth)
             .then(config => {
                 if (!config['themes'].includes(id)) return reject({ err: "you cannot modify this theme", status: 400 });
 
@@ -384,23 +314,9 @@ const editTheme = (hash, id, root, update = { key: String, value: String }) => {
     })
 }
 
-const generateSessionHash = () => {
-    return new Promise((resolve, reject) => {
-        crypto.randomBytes(12, (err, buffer) => {
-            if (err) {
-                console.log(err);
-                return reject(err);
-            }
-
-            return resolve(buffer.toString('hex'));
-        });
-    });
-}
-
 module.exports = {
     config: {
         login,
-        createConfig,
         getConfig,
         getLoginHistory,
         setTheme

@@ -2,15 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { schemas, validators } = require('./validator');
 const { config } = require('../database/database');
+const authentication = require('../database/authentication');
 
 const limiter = require('./rate-limit');
 
-router.post('/sessions/config/login', (req, res) => {
-    const request = validators.validateRequestBody(req, res, schemas.configLogin);
+// login
 
-    if (!request) return
+router.post('/login', async (req, res) => {
+    const auth = await authentication.validateToken(req, res);
+    if (!auth) return;
 
-    config.login(request.hash, request.username)
+    config.login(auth)
         .then(hash => {
             return res.json({ session: hash });
         })
@@ -19,27 +21,11 @@ router.post('/sessions/config/login', (req, res) => {
         })
 });
 
-router.post('/sessions/config/create', limiter.strict, (req, res) => {
-    const request = validators.validateRequestBody(req, res, schemas.configCreate);
+router.get('/config/', async (req, res) => {
+    const auth = await authentication.validateToken(req, res);
+    if (!auth) return;
 
-    if (!request) return;
-
-    config.createConfig(request.username)
-        .then(hash => {
-            return res.json({ session: hash });
-        })
-        .catch(err => {
-            return res.status(err.status).json(err);
-        })
-});
-
-
-router.get('/sessions/config/get/:hash', (req, res) => {
-    const request = validators.validateRequestParameters(req, res, schemas.configGet);
-
-    if (!request) return;
-
-    config.getConfig(request.hash)
+    config.getConfig(auth)
         .then(config => {
             return res.json(config);
         })
@@ -48,12 +34,14 @@ router.get('/sessions/config/get/:hash', (req, res) => {
         })
 });
 
-router.get('/sessions/config/login-history/get/:hash', (req, res) => {
+router.get('/config/login-history/', async (req, res) => {
     const request = validators.validateRequestParameters(req, res, schemas.configGet);
-
     if (!request) return;
 
-    config.getLoginHistory(request.hash)
+    const auth = await authentication.validateToken(req, res);
+    if (!auth) return;
+
+    config.getLoginHistory(auth)
         .then(config => {
             return res.json(config);
         })
@@ -62,14 +50,14 @@ router.get('/sessions/config/login-history/get/:hash', (req, res) => {
         })
 });
 
-router.post('/sessions/config/current-theme/set/:hash', (req, res) => {
-    const params = validators.validateRequestParameters(req, res, schemas.configGet);
-    if (!params) return;
-
+router.post('/config/set/current-theme/',async (req, res) => {
     const body = validators.validateRequestBody(req, res, schemas.configSetBody);
     if (!body) return;
 
-    config.setTheme(params.hash, body.theme)
+    const auth = await authentication.validateToken(req, res);
+    if (!auth) return;
+
+    config.setTheme(auth, body.theme)
         .then(config => {
             return res.json(config);
         })

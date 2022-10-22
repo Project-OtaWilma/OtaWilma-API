@@ -1,14 +1,5 @@
 const Joi = require('joi');
 
-const configLogin = Joi.object({
-    hash: Joi.string().required().length(24),
-    username: Joi.string().required()
-});
-
-const configCreate = Joi.object({
-    username: Joi.string().required()
-});
-
 const configGet = Joi.object({
     hash: Joi.string().required().length(24)
 });
@@ -22,7 +13,6 @@ const themeGetDefault = Joi.object({
 });
 
 const themeGet = Joi.object({
-    hash: Joi.string().required().length(24),
     id: Joi.string().required()
 });
 
@@ -58,8 +48,6 @@ module.exports = {
         validateRequestBody
     },
     schemas: {
-        configLogin,
-        configCreate,
         configGet,
         configSetBody,
         themeGetDefault,

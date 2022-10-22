@@ -2,7 +2,8 @@
     "defaultConfig": {
         "frontpage": "https://otawilma.tuukk.dev/assets/stylesheets/frontpage.css",
         "current-theme": "light",
-        "themes": []
+        "themes": [],
+        "login-history": []
     },
     "defaultTheme": {
         "colors": {
