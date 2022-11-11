@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { schemas, validators } = require('./validator');
-const { config } = require('../database/database');
+const { config } = require('../database/user-schema');
 const authentication = require('../database/authentication');
 
 const limiter = require('./rate-limit');

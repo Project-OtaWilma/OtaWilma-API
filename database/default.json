@@ -1,193 +1,383 @@
 {
     "defaultConfig": {
-        "frontpage": "https://otawilma.tuukk.dev/assets/stylesheets/frontpage.css",
         "current-theme": "light",
         "themes": [],
-        "login-history": []
+        "login-history": [],
+        "friends": [],
+        "friend-requests": [],
+        "block-list": []
     },
-    "defaultTheme": {
-        "colors": {
-            "--accent-main": {
-                "type": "color",
-                "value": "rgba(0, 51, 102, 1)"
+    "defaultThemes": {
+        "light": {
+            "colors": {
+                "--accent-main": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--background-main": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--background-darker": {
+                    "type": "color",
+                    "value": "rgba(239, 240, 243, 1)"
+                },
+                "--font-h1": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--font-h2": {
+                    "type": "color",
+                    "value": "rgba(23, 23, 23, 1)"
+                },
+                "--font-h3": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 0.33)"
+                },
+                "--font-h4": {
+                    "type": "color",
+                    "value": "rgba(233, 233, 233, 1)"
+                },
+                "--font-h5": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--border-main": {
+                    "type": "color",
+                    "value": "rgba(239, 240, 243, 1)"
+                },
+                "--border-darker": {
+                    "type": "color",
+                    "value": "rgba(229, 220, 223, 1)"
+                },
+                "--shadow-main": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 0.16)"
+                },
+                "--shadow-darker": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 0.3)"
+                },
+                "--schedule-main": {
+                    "type": "color",
+                    "value": "rgba(166, 202, 240, 1)"
+                },
+                "--schedule-h1": {
+                    "type": "color",
+                    "value": "rgba(16, 16, 16, 1, 1)"
+                },
+                "--L2021-mandatory-main": {
+                    "type": "color",
+                    "value": "rgba(191, 255, 191, 1)"
+                },
+                "--L2021-mandatory-selected": {
+                    "type": "color",
+                    "value": "rgba(38, 102, 38, 1)"
+                },
+                "--L2021-g-optional-main": {
+                    "type": "color",
+                    "value": "rgba(128, 255, 255, 1)"
+                },
+                "--L2021-g-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 102, 102, 1)"
+                },
+                "--L2021-l-optional-main": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 192, 1)"
+                },
+                "--L2021-l-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 39, 1)"
+                },
+                "--L2021-diploma-main": {
+                    "type": "color",
+                    "value": "rgba(191, 191, 255, 1)"
+                },
+                "--L2021-diploma-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 155, 1)"
+                },
+                "--L2016-l-optional-main": {
+                    "type": "color",
+                    "value": "rgba(232, 232, 255, 1)"
+                },
+                " --L2016-l-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(79, 79, 102, 1)"
+                },
+                "--L2016-g-optional-main": {
+                    "type": "color",
+                    "value": "rgba(255, 193, 193, 1)"
+                },
+                "--L2016-g-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(102, 40, 40, 1)"
+                },
+                "--course-tray-h1": {
+                    "type": "color",
+                    "value": "rgba(16, 16, 16, 1)"
+                },
+                "--login-main": {
+                    "type": "color",
+                    "value": "rgba(77, 133, 0, 1)"
+                },
+                "--login-lighter": {
+                    "type": "color",
+                    "value": "rgba(41, 163, 41, 1)"
+                },
+                "--error": {
+                    "type": "color",
+                    "value": "rgba(213, 50, 50, 1)"
+                },
+                "--info-background": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },  
+                "--clock-background": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--clock-markings": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--info-h1": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                }
             },
-            "--background-main": {
-                "type": "color",
-                "value": "rgba(255, 255, 255, 1)"
-            },
-            "--background-darker": {
-                "type": "color",
-                "value": "rgba(239, 240, 243, 1)"
-            },
-            "--font-h1": {
-                "type": "color",
-                "value": "rgba(0, 51, 102, 1)"
-            },
-            "--font-h2": {
-                "type": "color",
-                "value": "rgba(23, 23, 23, 1)"
-            },
-            "--font-h3": {
-                "type": "color",
-                "value": "rgba(0, 0, 0, 0.33)"
-            },
-            "--font-h4": {
-                "type": "color",
-                "value": "rgba(233, 233, 233, 1)"
-            },
-            "--font-h5": {
-                "type": "color",
-                "value": "rgba(255, 255, 255, 1)"
-            },
-            "--border-main": {
-                "type": "color",
-                "value": "rgba(239, 240, 243, 1)"
-            },
-            "--border-darker": {
-                "type": "color",
-                "value": "rgba(229, 220, 223, 1)"
-            },
-            "--shadow-main": {
-                "type": "color",
-                "value": "rgba(0, 0, 0, 0.16)"
-            },
-            "--shadow-darker": {
-                "type": "color",
-                "value": "rgba(0, 0, 0, 0.3)"
-            },
-            "--schedule-main": {
-                "type": "color",
-                "value": "rgba(166, 202, 240, 1)"
-            },
-            "--schedule-h1": {
-                "type": "color",
-                "value": "rgba(16, 16, 16, 1, 1)"
-            },
-            "--L2021-mandatory-main": {
-                "type": "color",
-                "value": "rgba(191, 255, 191, 1)"
-            },
-            "--L2021-mandatory-selected": {
-                "type": "color",
-                "value": "rgba(38, 102, 38, 1)"
-            },
-            "--L2021-g-optional-main": {
-                "type": "color",
-                "value": "rgba(128, 255, 255, 1)"
-            },
-            "--L2021-g-optional-selected": {
-                "type": "color",
-                "value": "rgba(0, 102, 102, 1)"
-            },
-            "--L2021-l-optional-main": {
-                "type": "color",
-                "value": "rgba(128, 128, 192, 1)"
-            },
-            "--L2021-l-optional-selected": {
-                "type": "color",
-                "value": "rgba(0, 0, 39, 1)"
-            },
-            "--L2021-diploma-main": {
-                "type": "color",
-                "value": "rgba(191, 191, 255, 1)"
-            },
-            "--L2021-diploma-selected": {
-                "type": "color",
-                "value": "rgba(0, 0, 155, 1)"
-            },
-            "--L2016-l-optional-main": {
-                "type": "color",
-                "value": "rgba(232, 232, 255, 1)"
-            },
-            " --L2016-l-optional-selected": {
-                "type": "color",
-                "value": "rgba(79, 79, 102, 1)"
-            },
-            "--L2016-g-optional-main": {
-                "type": "color",
-                "value": "rgba(255, 193, 193, 1)"
-            },
-            "--L2016-g-optional-selected": {
-                "type": "color",
-                "value": "rgba(102, 40, 40, 1)"
-            },
-            "--course-tray-h1": {
-                "type": "color",
-                "value": "rgba(16, 16, 16, 1)"
-            },
-            "--login-main": {
-                "type": "color",
-                "value": "rgba(77, 133, 0, 1)"
-            },
-            "--login-lighter": {
-                "type": "color",
-                "value": "rgba(41, 163, 41, 1)"
-            },
-            "--error": {
-                "type": "color",
-                "value": "rgba(213, 50, 50, 1)"
-            },
-            "--info-background": {
-                "type": "color",
-                "value": "rgba(0, 51, 102, 1)"
-            },  
-            "--clock-background": {
-                "type": "color",
-                "value": "rgba(0, 51, 102, 1)"
-            },
-            "--clock-markings": {
-                "type": "color",
-                "value": "rgba(255, 255, 255, 1)"
-            },
-            "--info-h1": {
-                "type": "color",
-                "value": "rgba(255, 255, 255, 1)"
+            "background": {
+                "url": {
+                    "type": "url",
+                    "value": ""
+                },
+                "blur": {
+                    "type": "number",
+                    "value": 0
+                },
+                "opacity": {
+                    "type": "number",
+                    "value": 100
+                },
+                "brightness": {
+                    "type": "number",
+                    "value": 100
+                },
+                "contrast": {
+                    "type": "number",
+                    "value": 100
+                },
+                "saturate": {
+                    "type": "number",
+                    "value": 100
+                },
+                "grayscale": {
+                    "type": "number",
+                    "value": 0
+                },
+                "sepia": {
+                    "type": "number",
+                    "value": 0
+                },
+                "hue-rotate": {
+                    "type": "number",
+                    "value": 0
+                },
+                "invert": {
+                    "type": "number",
+                    "value": 0
+                },
+                "rounded-edges": {
+                    "type": "number",
+                    "value": 0
+                }
             }
         },
-        "background": {
-            "url": {
-                "type": "url",
-                "value": ""
+        "dark": {
+            "colors": {
+                "--accent-main": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--background-main": {
+                    "type": "color",
+                    "value": "rgba(15, 15, 15, 1)"
+                },
+                "--background-darker": {
+                    "type": "color",
+                    "value": "rgba(10, 10, 10, 1)"
+                },
+                "--font-h1": {
+                    "type": "color",
+                    "value": "rgba(52, 101, 164, 1)"
+                },
+                "--font-h2": {
+                    "type": "color",
+                    "value": "rgba(165, 235, 255, 1)"
+                },
+                "--font-h3": {
+                    "type": "color",
+                    "value": "rgba(211, 215, 207, 0.5)"
+                },
+                "--font-h4": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--font-h5": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--border-main": {
+                    "type": "color",
+                    "value": "rgba(46, 52, 54, 1)"
+                },
+                "--border-darker": {
+                    "type": "color",
+                    "value": "rgba(35, 35, 35, 1)"
+                },
+                "--shadow-main": {
+                    "type": "color",
+                    "value": "rgba(19, 24, 28, 2)"
+                },
+                "--shadow-darker": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 0.3)"
+                },
+                "--schedule-main": {
+                    "type": "color",
+                    "value": "rgba(166, 202, 240, 1)"
+                },
+                "--schedule-h1": {
+                    "type": "color",
+                    "value": "rgba(16, 16, 16, 1)"
+                },
+                "--L2021-mandatory-main": {
+                    "type": "color",
+                    "value": "rgba(191, 255, 191, 1)"
+                },
+                "--L2021-mandatory-selected": {
+                    "type": "color",
+                    "value": "rgba(38, 102, 38, 1)"
+                },
+                "--L2021-g-optional-main": {
+                    "type": "color",
+                    "value": "rgba(128, 255, 255, 1)"
+                },
+                "--L2021-g-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 102, 102, 1)"
+                },
+                "--L2021-l-optional-main": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 192, 1)"
+                },
+                "--L2021-l-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 39, 1)"
+                },
+                "--L2021-diploma-main": {
+                    "type": "color",
+                    "value": "rgba(191, 191, 255, 1)"
+                },
+                "--L2021-diploma-selected": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 155, 1)"
+                },
+                "--L2016-l-optional-main": {
+                    "type": "color",
+                    "value": "rgba(232, 232, 255, 1)"
+                },
+                " --L2016-l-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(79, 79, 102, 1)"
+                },
+                "--L2016-g-optional-main": {
+                    "type": "color",
+                    "value": "rgba(255, 193, 193, 1)"
+                },
+                "--L2016-g-optional-selected": {
+                    "type": "color",
+                    "value": "rgba(102, 40, 40, 1)"
+                },
+                "--course-tray-h1": {
+                    "type": "color",
+                    "value": "rgba(16, 16, 16, 1)"
+                },
+                "--login-main": {
+                    "type": "color",
+                    "value": "rgba(77, 133, 0, 1)"
+                },
+                "--login-lighter": {
+                    "type": "color",
+                    "value": "rgba(41, 163, 41, 1)"
+                },
+                "--error": {
+                    "type": "color",
+                    "value": "rgba(213, 50, 50, 1)"
+                },
+                "--info-background": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--clock-background": {
+                    "type": "color",
+                    "value": "rgba(0, 51, 102, 1)"
+                },
+                "--clock-markings": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                "--info-h1": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                }
             },
-            "blur": {
-                "type": "number",
-                "value": 0
-            },
-            "opacity": {
-                "type": "number",
-                "value": 100
-            },
-            "brightness": {
-                "type": "number",
-                "value": 100
-            },
-            "contrast": {
-                "type": "number",
-                "value": 100
-            },
-            "saturate": {
-                "type": "number",
-                "value": 100
-            },
-            "grayscale": {
-                "type": "number",
-                "value": 0
-            },
-            "sepia": {
-                "type": "number",
-                "value": 0
-            },
-            "hue-rotate": {
-                "type": "number",
-                "value": 0
-            },
-            "invert": {
-                "type": "number",
-                "value": 0
-            },
-            "rounded-edges": {
-                "type": "number",
-                "value": 0
+            "background": {
+                "url": {
+                    "type": "url",
+                    "value": ""
+                },
+                "blur": {
+                    "type": "number",
+                    "value": 0
+                },
+                "opacity": {
+                    "type": "number",
+                    "value": 100
+                },
+                "brightness": {
+                    "type": "number",
+                    "value": 120
+                },
+                "contrast": {
+                    "type": "number",
+                    "value": 100
+                },
+                "saturate": {
+                    "type": "number",
+                    "value": 100
+                },
+                "grayscale": {
+                    "type": "number",
+                    "value": 0
+                },
+                "sepia": {
+                    "type": "number",
+                    "value": 0
+                },
+                "hue-rotate": {
+                    "type": "number",
+                    "value": 0
+                },
+                "invert": {
+                    "type": "number",
+                    "value": 0
+                },
+                "rounded-edges": {
+                    "type": "color",
+                    "value": 0
+                }
             }
         }
     }

@@ -8,18 +8,26 @@ const configSetBody = Joi.object({
     theme: Joi.string().required().max(12)
 });
 
+const themeCreate = Joi.object({
+    preset: Joi.string().required().valid('light', 'dark')
+})
+
 const themeGetDefault = Joi.object({
-    id: Joi.string().required()
+    id: Joi.string().required().max(256)
 });
 
 const themeGet = Joi.object({
-    id: Joi.string().required()
+    id: Joi.string().required().max(256)
 });
 
 const themePostBody = Joi.object({
     key: Joi.string().max(128).required(),
     value: Joi.string().max(1024).required().allow('')
 });
+
+const friendRequest = Joi.object({
+    username: Joi.string().max(256)
+})
 
 const validateRequestParameters = (req, res, schema = {}) => {
     const result = schema.validate(req.params);
@@ -52,6 +60,8 @@ module.exports = {
         configSetBody,
         themeGetDefault,
         themeGet,
-        themePostBody
+        themePostBody,
+        friendRequest,
+        themeCreate
     }
 }

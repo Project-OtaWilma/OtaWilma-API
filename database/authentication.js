@@ -31,7 +31,7 @@ const validateToken = (req, res) => {
                 return resolve(null);
             }
 
-            return resolve(decoded);
+            return resolve({...decoded, ...{raw: token}});
         });
     });
 
