@@ -8,8 +8,8 @@ const {} = require('./authentication');
 const { config } = require('./user-schema');
 const { resolve } = require('path');
 
-// const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://localhost:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+// const url = `mongodb://localhost:27017`;
 
 const sendFriendRequest = (auth, username) => {
     return new Promise((resolve, reject) => {

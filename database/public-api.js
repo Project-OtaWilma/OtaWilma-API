@@ -10,8 +10,8 @@ const { resolve } = require('path');
 
 const { generateHash } = require('./utility')
 
-// const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://localhost:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+// const url = `mongodb://localhost:27017`;
 
 //const wilmaAPI = 'https://wilma-api.tuukk.dev/api/';
 const wilmaAPI = 'http://localhost:3001/api/';

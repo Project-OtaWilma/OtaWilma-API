@@ -6,3 +6,6 @@ node_modules
 
 #tools used to manage MongoDB database
 /tools.js
+
+#config
+/config.json

@@ -4,8 +4,8 @@ const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
 const {} = require('./authentication');
 
-// const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://localhost:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+// const url = `mongodb://localhost:27017`;
 
 const login = (auth) => {
     return new Promise((resolve, reject) => {
