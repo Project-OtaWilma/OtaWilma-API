@@ -175,7 +175,7 @@ const editTheme = (auth, id, root, update = { key: String, value: String }) => {
             .then(config => {
                 if (!config['themes'].includes(id)) return reject({ err: "you cannot modify this theme", status: 400 });
 
-                if (!Object.keys(defaultTheme[root]).includes(update.key)) {
+                if (!Object.keys(defaultThemes['light'][root]).includes(update.key)) {
                     return reject({ err: `"${update.key}" is not a valid field in "${root}"`, status: 400 });
                 }
 
