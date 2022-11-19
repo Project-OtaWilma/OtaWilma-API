@@ -25,8 +25,8 @@ const themePostBody = Joi.object({
     value: Joi.string().max(1024).required().allow('')
 });
 
-const friendRequest = Joi.object({
-    username: Joi.string().max(256)
+const token = Joi.object({
+    hash: Joi.string().max(256)
 })
 
 const validateRequestParameters = (req, res, schema = {}) => {
@@ -61,7 +61,7 @@ module.exports = {
         themeGetDefault,
         themeGet,
         themePostBody,
-        friendRequest,
+        token,
         themeCreate
     }
 }

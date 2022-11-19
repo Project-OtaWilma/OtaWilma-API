@@ -5,7 +5,7 @@ const { generate } = require('shortid');
 const {} = require('./authentication');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-// const url = `mongodb://localhost:27017`;
+//const url = `mongodb://localhost:27017`;
 
 const login = (auth) => {
     return new Promise((resolve, reject) => {
@@ -108,6 +108,36 @@ const setTheme = (auth, id) => {
     })
 }
 
+const setPublicFlag = (auth) => {
+    return new Promise((resolve, reject) => {
+        getConfig(auth)
+        .then(() => {
+            
+            MongoClient.connect(url, (err, database) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                const db = database.db('OtaWilma');
+
+                const query = { username: auth.username }
+                const values = { $set: { 'public': true } }
+
+                db.collection('user-schema').updateOne(query, values, (err, res) => {
+                    if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                    database.close();
+
+                    if (res.matchedCount < 1) return reject({ err: "Couldn't locate configuration with specified hash", status: 400 });
+
+                    return resolve(res);
+                });
+            })
+        })
+        .catch(err => {
+            return reject(err);
+        })
+    });
+}
+
 
 
 module.exports = {
@@ -115,6 +145,7 @@ module.exports = {
         login,
         getConfig,
         getLoginHistory,
-        setTheme
+        setTheme,
+        setPublicFlag
     }
 }

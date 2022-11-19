@@ -6,15 +6,15 @@ const {} = require('./authentication');
 
 const request = require('request');
 const { config } = require('./user-schema');
-const { resolve } = require('path');
 
-const { generateHash } = require('./utility')
+const { generateHash } = require('./utility');
+const utility = require('./utility');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-// const url = `mongodb://localhost:27017`;
+//const url = `mongodb://localhost:27017`;
 
-//const wilmaAPI = 'https://wilma-api.tuukk.dev/api/';
-const wilmaAPI = 'http://localhost:3001/api/';
+const wilmaAPI = 'https://beta.wilma-api.tuukk.dev/api/';
+//const wilmaAPI = 'http://localhost:3001/api/';
 
 const fetchUserData = (auth) => {
     return new Promise((resolve, reject) => {
@@ -51,13 +51,22 @@ const publish = (auth) => {
                     const value = {
                         username: auth.username,
                         selected: data,
+                        'access-tokens': {},
+                        'access-list': [],
                         hash: hash
                     }
 
                     db.collection('public-api').replaceOne(query, value, {upsert: true}, (err, res) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                        return resolve({hash: hash})
+                        config.setPublicFlag(auth)
+                        .then(() => {
+                            return resolve({hash: hash})
+                        })
+                        .catch(err => {
+                            return reject(err);
+                        })
+
                     })
                 })
             })
@@ -72,8 +81,256 @@ const publish = (auth) => {
     })
 }
 
+const update = (auth) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                fetchUserData(auth)
+                .then(data => {
+                    if(!config['public']) return resolve({...data, updated: false});
+
+                    MongoClient.connect(url, (err, database) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+        
+                        const db = database.db('OtaWilma');
+                        const query = {username: auth.username};
+                        const update = {
+                            $set: {
+                                selected: data
+                            },
+                        }
+
+                        db.collection('public-api').updateOne(query, update, (err, res) => {
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                            return resolve({data, updated: true})
+                        })
+                    })
+
+                })
+                .catch(err => {
+                    return reject(err);
+                })
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    })
+}
+
+const getToken = (auth, hash) => {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+            const query = {
+                [`access-tokens.${hash}`]: { $exists: true}
+            };
+
+            db.collection('public-api').findOne(query, (err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+                
+                if(!res) return reject({err: 'Invalid access-token', status: 401})
+
+                return resolve({
+                    exists: res['access-list'].includes(auth.username),
+                    token: res['access-tokens'][hash],
+                    owner: res['username'],
+                    hash: res['hash']
+                });
+            })
+        })
+    })
+}
+
+const generateAccessToken = (auth) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                if(!config['public']) return reject({err: 'Your course-selections are not public', status: 401});
+
+                MongoClient.connect(url, async (err, database) => {
+                    if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                    const hash = await utility.generateHash();
+    
+                    const db = database.db('OtaWilma');
+                    const query = {username: auth.username};
+                    const update = {
+                        $set: {
+                            [`access-tokens.${hash}`]: {
+                                used: false,
+                                user: null
+                            },
+                        },
+                    }
+
+                    db.collection('public-api').updateOne(query, update, (err, res) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                        return resolve({hash: hash})
+                    })
+                })
+
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    });
+}
+
+const invalidateAccessToken = (auth, hash) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                if(!config['public']) return reject({err: 'Your course-selections are not public', status: 401});
+
+                getToken(auth, hash)
+                .then(res => {
+                    MongoClient.connect(url, (err, database) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+        
+                        const db = database.db('OtaWilma');
+                        const query = {username: auth.username};
+
+                        const update = {
+                            $unset: {[`access-tokens.${hash}`]: 1},
+                            $pull: {'access-list': res['token'].user}
+                        }
+
+                        db.collection('public-api').updateOne(query, update, (err, res) => {
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+    
+                            return resolve({success: true})
+                        })
+                    })
+                })
+                .catch(err => {
+                    return reject(err);
+                })
+
+                
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    });
+}
+
+const useToken = (auth, hash) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                if(auth.username == config['username']) return reject({err: 'You cannot use your own access-token', status: 401});
+
+                getToken(auth, hash)
+                .then(res => {
+                    if(res['exists']) return reject({err: 'You have already access to this information', status: 400});
+                    if(res['token'].used) return reject({err: 'Invalid access-token', status: 401});
+                    
+                    MongoClient.connect(url, (err, database) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+        
+                        const db = database.db('OtaWilma');
+                        const query = {hash: res['hash']};
+                        const update = {
+                            $set: {
+                                [`access-tokens.${hash}`]: {
+                                    used: true,
+                                    user: auth.username
+                                },
+                            },
+                            $push: {
+                                'access-list': auth.username
+                            }
+                        }
+    
+                        db.collection('public-api').updateOne(query, update, (err, res) => {
+                            console.log(err);
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+    
+                            return resolve({owner: res['owner']})
+                        })
+                    })
+
+                })
+                .catch(err => {
+                    return reject(err);
+                })
+                
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    });
+}
+
+const getAccessList = (auth) => {
+    return new Promise((resolve, reject) => {
+
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+            const query = {
+                'access-list': auth.username
+            };
+
+            const projection = {
+                '_id': 0,
+                'selected': 0,
+                'access-tokens': 0,
+                'access-list': 0,
+                'username': 0,
+            }
+
+            db.collection('public-api').find(query, {projection: projection}).toArray((err, res) => {
+                console.log(err);
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                return resolve(res.map(r => r['hash']))
+            })
+        })
+    });
+}
+
+const getInformation = (auth, hash) => {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+            const query = {
+                hash: hash,
+            };
+
+            const projection = {
+                '_id': 0,
+                'access-tokens': 0,
+                'access-list': 0,
+                'hash': 0
+            }
+
+            db.collection('public-api').findOne(query, {projection: projection}, (err, res) => {
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                if(err) return reject({err: 'Invalid access token'});
+
+                return resolve(res)
+            })
+        })
+    });
+}
+
 module.exports = {
     public: {
-        publish
+        publish,
+        update,
+        generateAccessToken,
+        invalidateAccessToken,
+        useToken,
+        getAccessList,
+        getInformation
     }
 }

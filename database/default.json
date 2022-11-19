@@ -3,9 +3,7 @@
         "current-theme": "light",
         "themes": [],
         "login-history": [],
-        "friends": [],
-        "friend-requests": [],
-        "block-list": []
+        "public": false
     },
     "defaultThemes": {
         "light": {
@@ -348,7 +346,7 @@
                 },
                 "brightness": {
                     "type": "number",
-                    "value": 120
+                    "value": 100
                 },
                 "contrast": {
                     "type": "number",
