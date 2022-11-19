@@ -4,7 +4,6 @@ const cors = require('cors');
 const sessions = require('./routers/sessions');
 const themes = require('./routers/themes');
 const public = require('./routers/public-api');
-const friends = require('./routers/friends');
 
 const limiter = require('./routers/rate-limit');
 
@@ -22,7 +21,6 @@ app.use(cors());
 app.use('/api', sessions, limiter.standard);
 app.use('/api', themes, limiter.standard);
 app.use('/api', public, limiter.standard);
-app.use('/api', friends, limiter.standard);
 
 // PORT
 app.listen(PORT, () => {

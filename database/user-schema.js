@@ -44,8 +44,7 @@ const getConfig = (auth) => {
             const db = database.db('OtaWilma');
             const query = { username: auth.username }
             const projection = {
-                '_id': 0,
-                'login-history': 0
+                '_id': 0
             }
 
             db.collection('user-schema').find(query).project(projection).toArray((err, res) => {
