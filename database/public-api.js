@@ -222,13 +222,13 @@ const useToken = (auth, hash) => {
     return new Promise((resolve, reject) => {
         config.getConfig(auth)
             .then(config => {
-                if(auth.username == config['username']) return reject({err: 'You cannot use your own access-token', status: 401});
+                // if(auth.username == config['username']) return reject({err: 'You cannot use your own access-token', status: 401});
 
                 getToken(auth, hash)
                 .then(res => {
                     if(res['exists']) return reject({err: 'You have already access to this information', status: 400});
                     if(res['token'].used) return reject({err: 'Invalid access-token', status: 401});
-                    
+                    const owner = res['owner'];
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
         
@@ -249,8 +249,8 @@ const useToken = (auth, hash) => {
                         db.collection('public-api').updateOne(query, update, (err, res) => {
                             console.log(err);
                             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-    
-                            return resolve({owner: res['owner']})
+                            
+                            return resolve({owner: owner})
                         })
                     })
 
@@ -307,7 +307,6 @@ const getAccessList = (auth) => {
 
             const projection = {
                 '_id': 0,
-                'selected': 0,
                 'access-tokens': 0,
                 'access-list': 0,
             }
@@ -315,8 +314,10 @@ const getAccessList = (auth) => {
             db.collection('public-api').find(query, {projection: projection}).toArray((err, res) => {
                 console.log(err);
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+                const result = {};
 
-                return resolve(res)
+                res.forEach(f => result[f.username] = f['selected'].map(c => c.code));
+                return resolve(result)
             })
         })
     });

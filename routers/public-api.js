@@ -98,7 +98,7 @@ router.get('/public-api/tokens/list', async (req, res) => {
         });
 });
 
-router.get('/public-api/access/list', async (req, res) => {
+router.get('/public-api/friends', async (req, res) => {
     const auth = await authentication.validateToken(req, res);
     if (!auth) return;
 
