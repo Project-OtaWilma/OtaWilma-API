@@ -282,14 +282,13 @@ const getAccessList = (auth) => {
                 'selected': 0,
                 'access-tokens': 0,
                 'access-list': 0,
-                'username': 0,
             }
 
             db.collection('public-api').find(query, {projection: projection}).toArray((err, res) => {
                 console.log(err);
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                return resolve(res.map(r => r['hash']))
+                return resolve(res)
             })
         })
     });
