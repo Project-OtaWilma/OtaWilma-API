@@ -222,7 +222,7 @@ const useToken = (auth, hash) => {
     return new Promise((resolve, reject) => {
         config.getConfig(auth)
             .then(config => {
-                // if(auth.username == config['username']) return reject({err: 'You cannot use your own access-token', status: 401});
+                if(auth.username == config['username']) return reject({err: 'You cannot use your own access-token', status: 401});
 
                 getToken(auth, hash)
                 .then(res => {
