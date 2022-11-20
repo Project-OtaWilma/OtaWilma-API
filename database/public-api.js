@@ -266,6 +266,34 @@ const useToken = (auth, hash) => {
     });
 }
 
+const getAccessTokens = (auth) => {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, database) => {
+            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+            const db = database.db('OtaWilma');
+            const query = {
+                username: auth.username
+            };
+
+            const projection = {
+                '_id': 0,
+                'username': 0,
+                'hash': 0,
+                'selected': 0,
+                'access-list': 0,
+            }
+
+            db.collection('public-api').findOne(query, {projection: projection}, (err, res) => {
+                console.log(err);
+                if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+
+                return resolve((Object.keys(res['access-tokens']).map(hash => {return {...res['access-tokens'][hash], hash: hash}})))
+            })
+        })
+    });
+}
+
 const getAccessList = (auth) => {
     return new Promise((resolve, reject) => {
 
@@ -330,6 +358,7 @@ module.exports = {
         invalidateAccessToken,
         useToken,
         getAccessList,
+        getAccessTokens,
         getInformation
     }
 }

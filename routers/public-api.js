@@ -88,6 +88,20 @@ router.get('/public-api/tokens/list', async (req, res) => {
     const auth = await authentication.validateToken(req, res);
     if (!auth) return;
 
+    public.getAccessTokens(auth)
+        .then(result => {
+            return res.json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(err.status).json(err);
+        });
+});
+
+router.get('/public-api/access/list', async (req, res) => {
+    const auth = await authentication.validateToken(req, res);
+    if (!auth) return;
+
     public.getAccessList(auth)
         .then(result => {
             return res.json(result);
