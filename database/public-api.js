@@ -150,6 +150,7 @@ const generateAccessToken = (auth) => {
             .then(config => {
                 if(!config['public']) return reject({err: 'Your course-selections are not public', status: 401});
 
+
                 MongoClient.connect(url, async (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
@@ -289,7 +290,8 @@ const getAccessTokens = (auth) => {
             db.collection('public-api').findOne(query, {projection: projection}, (err, res) => {
                 console.log(err);
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
+                if(!res) return reject({err: 'Failed to locate access-tokens for user. Are you sure that the user has public-api enabled?', status: 400});
+                
                 return resolve((Object.keys(res['access-tokens']).map(hash => {return {...res['access-tokens'][hash], hash: hash}})))
             })
         })
