@@ -13,7 +13,7 @@ const login = (auth) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
             const db = database.db('OtaWilma');
-            const query = { username: auth.username }
+            const query = { username: auth.username.toLowerCase() }
 
             db.collection('user-schema').find(query).toArray((err, res) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
