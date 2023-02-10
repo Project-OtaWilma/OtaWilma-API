@@ -19,7 +19,7 @@ router.post('/themes/create/:preset', limiter.create, async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -33,7 +33,7 @@ router.get('/themes/defaults/get/:id', limiter.cacheable, async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -50,7 +50,7 @@ router.get('/themes/get/:id', async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -65,7 +65,7 @@ router.get('/themes/list/', async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 
 });
@@ -86,7 +86,7 @@ router.post('/themes/:id/edit/colors', async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -106,7 +106,7 @@ router.post('/themes/:id/edit/background/', async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -122,7 +122,7 @@ router.post('/themes/:id/remove', limiter.create, async (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 

@@ -29,6 +29,10 @@ const token = Joi.object({
     hash: Joi.string().max(256)
 })
 
+const code = Joi.object({
+    code: Joi.string().max(64).required()
+})
+
 const validateRequestParameters = (req, res, schema = {}) => {
     const result = schema.validate(req.params);
     if (result.error) {
@@ -62,6 +66,7 @@ module.exports = {
         themeGet,
         themePostBody,
         token,
-        themeCreate
+        themeCreate,
+        code
     }
 }
