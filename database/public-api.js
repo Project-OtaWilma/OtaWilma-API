@@ -11,11 +11,11 @@ const { generateHash } = require('./utility');
 const utility = require('./utility');
 const { resolve } = require('path');
 
-//const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://127.0.0.1:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+//const url = `mongodb://127.0.0.1:27017`;
 
-//const wilmaAPI = 'https://beta.wilma-api.tuukk.dev/api/';
-const wilmaAPI = 'http://localhost:3001/api/';
+const wilmaAPI = 'https://beta.wilma-api.tuukk.dev/api/';
+//const wilmaAPI = 'http://localhost:3001/api/';
 
 const fetchUserData = (auth) => {
     return new Promise((resolve, reject) => {

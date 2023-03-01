@@ -1,11 +1,12 @@
 const { MongoClient } = require('mongodb');
 const {} = require('./authentication');
+const { user, password, host, port } = require('./secret.json');
 
 const { config } = require('./user-schema');
 const { public } = require('./public-api');
 
-//const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-const url = `mongodb://127.0.0.1:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
+//const url = `mongodb://127.0.0.1:27017`;
 
 const appendPlanned = (auth, code) => {
     return new Promise((resolve, reject) => {
@@ -110,7 +111,8 @@ const getMyPlan = (auth) => {
             db.collection('public-api').find(query, {projection: projection}).toArray((err, res) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                return resolve(res[0] ? res[0]['planned'] : [])
+                console.log(res[0]['planned']);
+                return resolve(res[0] && res[0]['planned'] ? res[0]['planned'] : [])
             })
         })
     });
