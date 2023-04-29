@@ -110,7 +110,7 @@ const getMyPlan = (auth) => {
 
             db.collection('public-api').find(query, {projection: projection}).toArray((err, res) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
-
+                if(!res[0]) return resolve([])
                 console.log(res[0]['planned']);
                 return resolve(res[0] && res[0]['planned'] ? res[0]['planned'] : [])
             })
