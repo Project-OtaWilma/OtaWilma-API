@@ -322,7 +322,7 @@ const getAccessList = (auth) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
                 const result = {};
 
-                res.forEach(f => result[f.username] = f['selected'].map(c => c.code));
+                res.forEach(f => result[f.username] = f['selected'].filter(c => c.tray == '2023-2024(Otaniemen lukio, Espoo)').map(c => c.code));
                 return resolve(result)
             })
         })
