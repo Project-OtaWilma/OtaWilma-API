@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
             return res.json({ session: hash });
         })
         .catch(err => {
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -30,7 +30,7 @@ router.get('/config/', async (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -46,7 +46,7 @@ router.get('/config/login-history/', async (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 
@@ -62,7 +62,7 @@ router.post('/config/set/current-theme/',async (req, res) => {
             return res.json(config);
         })
         .catch(err => {
-            return res.status(err.status).json(err);
+            return res.status(err.status ?? 500).json(err);
         })
 });
 

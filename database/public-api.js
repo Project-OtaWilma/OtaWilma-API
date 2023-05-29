@@ -9,11 +9,12 @@ const { config } = require('./user-schema');
 
 const { generateHash } = require('./utility');
 const utility = require('./utility');
+const { resolve } = require('path');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-//const url = `mongodb://localhost:27017`;
+//const url = `mongodb://127.0.0.1:27017`;
 
-const wilmaAPI = 'https://beta.wilma-api.tuukk.dev/api/';
+const wilmaAPI = 'https://wilma.otawilma.fi/api/';
 //const wilmaAPI = 'http://localhost:3001/api/';
 
 const fetchUserData = (auth) => {
@@ -51,6 +52,7 @@ const publish = (auth) => {
                     const value = {
                         username: auth.username,
                         selected: data,
+                        planned: [],
                         'access-tokens': {},
                         'access-list': [],
                         hash: hash
@@ -320,22 +322,19 @@ const getAccessList = (auth) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
                 const result = {};
 
-                res.forEach(f => result[f.username] = f['selected'].map(c => c.code));
+                res.forEach(f => result[f.username] = f['selected'].filter(c => c.tray == '2023-2024(Otaniemen lukio, Espoo)').map(c => c.code));
                 return resolve(result)
             })
         })
     });
 }
 
-const getInformation = (auth, hash) => {
+const getInformation = (auth, query) => {
     return new Promise((resolve, reject) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
             const db = database.db('OtaWilma');
-            const query = {
-                hash: hash,
-            };
 
             const projection = {
                 '_id': 0,
@@ -355,6 +354,84 @@ const getInformation = (auth, hash) => {
     });
 }
 
+const appendPlanned = (auth, code) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                if(!config['public']) return reject({err: 'Your course-selections are not public', status: 401});
+
+                getInformation(auth, {username: auth.username})
+                .then(data => {
+                    if(data['planned'] && data['planned'].includes(code)) return reject({err: 'You are already planning to take this course', status: 400});
+                    
+                    MongoClient.connect(url, (err, database) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+            
+                        const db = database.db('OtaWilma');
+                        const query = {
+                            username: auth.username,
+                        };
+            
+                        const update = {
+                            $push: {
+                                planned: code
+                            }
+                        }
+            
+                        db.collection('public-api').updateOne(query, update, (err, res) => {
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+            
+                            return resolve(res)
+                        })
+                    })
+                })
+
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    })
+}
+
+const removePlanned = (auth, code) => {
+    return new Promise((resolve, reject) => {
+        config.getConfig(auth)
+            .then(config => {
+                if(!config['public']) return reject({err: 'Your course-selections are not public', status: 401});
+
+                getInformation(auth, {username: auth.username})
+                .then(data => {
+                    if(!data['planned'] && data['planned'].includes(code)) return reject({err: 'You are not planning to take this course', status: 400});
+                    
+                    MongoClient.connect(url, (err, database) => {
+                        if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+            
+                        const db = database.db('OtaWilma');
+                        const query = {
+                            username: auth.username,
+                        };
+            
+                        const update = {
+                            $pull: {
+                                planned: code
+                            }
+                        }
+            
+                        db.collection('public-api').updateOne(query, update, (err, res) => {
+                            if (err) return reject({ err: 'Failed to connect to database', status: 500 });
+            
+                            return resolve(res)
+                        })
+                    })
+                })
+
+            })
+            .catch(err => {
+                return reject(err);
+            })
+    })
+}
+
 module.exports = {
     public: {
         publish,
@@ -365,5 +442,5 @@ module.exports = {
         getAccessList,
         getAccessTokens,
         getInformation
-    }
+    },
 }

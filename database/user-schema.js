@@ -5,7 +5,7 @@ const { generate } = require('shortid');
 const {} = require('./authentication');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-//const url = `mongodb://localhost:27017`;
+//const url = `mongodb://127.0.0.1:27017`;
 
 const login = (auth) => {
     return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ const login = (auth) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
             const db = database.db('OtaWilma');
-            const query = { username: auth.username }
+            const query = { username: auth.username.toLowerCase() }
 
             db.collection('user-schema').find(query).toArray((err, res) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });

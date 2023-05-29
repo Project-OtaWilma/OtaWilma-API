@@ -7,14 +7,13 @@ const {} = require('./authentication');
 const { config } = require('./user-schema');
 
 const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-// const url = `mongodb://localhost:27017`;
+//const url = `mongodb://127.0.0.1:27017`;
 
 const createTheme = (auth, preset) => {
     return new Promise((resolve, reject) => {
 
         config.getConfig(auth)
             .then(config => {
-
                 if (config.themes.length > 24) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
 
                 MongoClient.connect(url, (err, database) => {
