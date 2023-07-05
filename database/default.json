@@ -143,6 +143,26 @@
                 "--info-h1": {
                     "type": "color",
                     "value": "rgba(255, 255, 255, 1)"
+                },
+                "--map-outline": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
+                },
+                    "--map-background": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                    "--map-details": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
+                },
+                    "--map-fill": {
+                    "type": "color",
+                    "value": "rgba(255, 255, 255, 1)"
+                },
+                    "--map-h1": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
                 }
             },
             "background": {
@@ -329,6 +349,26 @@
                 "--info-h1": {
                     "type": "color",
                     "value": "rgba(255, 255, 255, 1)"
+                },
+                "--map-outline": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
+                },
+                "--map-background": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 1)"
+                },
+                "--map-details": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
+                },
+                "--map-fill": {
+                    "type": "color",
+                    "value": "rgba(0, 0, 0, 1)"
+                },
+                "--map-h1": {
+                    "type": "color",
+                    "value": "rgba(128, 128, 128, 1)"
                 }
             },
             "background": {
