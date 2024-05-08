@@ -17,6 +17,8 @@ const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAUL
 const wilmaAPI = 'https://wilma.otawilma.fi/api/';
 //const wilmaAPI = 'http://localhost:3001/api/';
 
+const currentTray = '2024-2025(Otaniemen lukio, Espoo)'
+
 const fetchUserData = (auth) => {
     return new Promise((resolve, reject) => {
         request({
@@ -322,7 +324,7 @@ const getAccessList = (auth) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
                 const result = {};
 
-                res.forEach(f => result[f.username] = f['selected'].filter(c => c.tray == '2023-2024(Otaniemen lukio, Espoo)').map(c => c.code));
+                res.forEach(f => result[f.username] = f['selected'].filter(c => c.tray == currentTray).map(c => c.code));
                 return resolve(result)
             })
         })

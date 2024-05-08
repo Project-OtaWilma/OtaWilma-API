@@ -9,9 +9,6 @@ const limiter = require('./rate-limit');
 const { statistics }= require('../database/statistics');
 
 router.get('/statistics/users', limiter.create, async (req, res) => {
-    const auth = await authentication.validateToken(req, res);
-    if (!auth) return;
-    
 
     statistics.getTotalUsers()
     .then(data => {
