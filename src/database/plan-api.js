@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 const {} = require('./authentication');
-const { user, password, host, port } = require('./secret.json');
+const { user, password, host, port } = require('../../secret.json');
 
 const { config } = require('./user-schema');
 const { public } = require('./public-api');

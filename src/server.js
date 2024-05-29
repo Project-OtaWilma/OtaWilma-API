@@ -8,7 +8,7 @@ const statistics = require('./routers/statistics');
 
 const limiter = require('./routers/rate-limit');
 
-const { port } = require('./config.json');
+const { port } = require('../config.json');
 
 const app = express();
 const PORT = process.env.PORT || port;
