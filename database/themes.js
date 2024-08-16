@@ -53,7 +53,6 @@ const createTheme = (auth, preset) => {
 
 const getDefaultTheme = (id) => {
     return new Promise((resolve, reject) => {
-
         const themes = ['light', 'dark'];
 
         if (!themes.includes(id)) return reject({ err: "specified theme is not a a default theme", status: 400 })
