@@ -1,4 +1,3 @@
 {
-    "port": 8302,
-    "production": true
+    "port": 8302
 }

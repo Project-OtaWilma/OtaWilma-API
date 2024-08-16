@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const { user, password, host, port } = require('./secret.json');
+const { user, password, host, port } = require('../secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
 const {} = require('./authentication');
