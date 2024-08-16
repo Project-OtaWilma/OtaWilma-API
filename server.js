@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { user, password, host, port, authServer } = require('../secret.json');
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT&authSource=${authServer}`;
+const { user, password, host, authServer } = require('../secret.json');
+const url = `mongodb://${user}:${password}@${host}:27017/?authMechanism=DEFAULT&authSource=${authServer}`;
 
 const sessions = require('./routers/sessions');
 const themes = require('./routers/themes');
