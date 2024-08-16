@@ -17,6 +17,7 @@ const createTheme = (auth, preset) => {
                 if (config.themes.length > 24) return reject({ err: 'Failed to create theme - maximium number of themes have been reached', status: 400 })
 
                 MongoClient.connect(url, (err, database) => {
+                    if (err) console.log(err);
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
                     const db = database.db('OtaWilma');
