@@ -47,7 +47,7 @@ const publish = (auth) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
     
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
                     const query = {username: auth.username};
                     const value = {
                         username: auth.username,
@@ -94,7 +94,7 @@ const update = (auth) => {
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
         
-                        const db = database.db('OtaWilma');
+                        const db = database.db('otawilma');
                         const query = {username: auth.username};
                         const update = {
                             $set: {
@@ -125,7 +125,7 @@ const getToken = (auth, hash) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = {
                 [`access-tokens.${hash}`]: { $exists: true}
             };
@@ -158,7 +158,7 @@ const generateAccessToken = (auth) => {
 
                     const hash = await utility.generateHash();
     
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
                     const query = {username: auth.username};
                     const update = {
                         $set: {
@@ -194,7 +194,7 @@ const invalidateAccessToken = (auth, hash) => {
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
         
-                        const db = database.db('OtaWilma');
+                        const db = database.db('otawilma');
                         const query = {username: auth.username};
 
                         const update = {
@@ -237,7 +237,7 @@ const useToken = (auth, hash) => {
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
         
-                        const db = database.db('OtaWilma');
+                        const db = database.db('otawilma');
                         const query = {hash: res['hash']};
                         const update = {
                             $set: {
@@ -276,7 +276,7 @@ const getAccessTokens = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = {
                 username: auth.username
             };
@@ -306,7 +306,7 @@ const getAccessList = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = {
                 'access-list': auth.username
             };
@@ -334,7 +334,7 @@ const getInformation = (auth, query) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
 
             const projection = {
                 '_id': 0,
@@ -367,7 +367,7 @@ const appendPlanned = (auth, code) => {
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
             
-                        const db = database.db('OtaWilma');
+                        const db = database.db('otawilma');
                         const query = {
                             username: auth.username,
                         };
@@ -406,7 +406,7 @@ const removePlanned = (auth, code) => {
                     MongoClient.connect(url, (err, database) => {
                         if (err) return reject({ err: 'Failed to connect to database', status: 500 });
             
-                        const db = database.db('OtaWilma');
+                        const db = database.db('otawilma');
                         const query = {
                             username: auth.username,
                         };

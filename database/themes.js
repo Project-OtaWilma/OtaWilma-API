@@ -19,7 +19,7 @@ const createTheme = (auth, preset) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
 
                     const theme = { ...defaultThemes[preset] };
                     theme['hash'] = generate();
@@ -58,10 +58,9 @@ const getDefaultTheme = (id) => {
         if (!themes.includes(id)) return reject({ err: "specified theme is not a a default theme", status: 400 })
             
             MongoClient.connect(url, (err, database) => {
-            if (err) console.log([err, url]);
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
 
             const query = { hash: id }
 
@@ -89,7 +88,7 @@ const getTheme = (auth, id) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
 
                     const query = { hash: id }
 
@@ -134,7 +133,7 @@ const removeTheme = (auth, id) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
 
                     const query = { hash: id }
 
@@ -181,7 +180,7 @@ const editTheme = (auth, id, root, update = { key: String, value: String }) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
 
                     const value = {};
 

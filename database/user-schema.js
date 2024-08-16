@@ -12,7 +12,7 @@ const login = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = { username: auth.username.toLowerCase() }
 
             db.collection('user-schema').find(query).toArray((err, res) => {
@@ -41,7 +41,7 @@ const getConfig = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = { username: auth.username }
             const projection = {
                 '_id': 0
@@ -85,7 +85,7 @@ const setTheme = (auth, id) => {
                 MongoClient.connect(url, (err, database) => {
                     if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                    const db = database.db('OtaWilma');
+                    const db = database.db('otawilma');
 
                     const query = { username: auth.username }
                     const values = { $set: { 'current-theme': id } }
@@ -116,7 +116,7 @@ const setPublicFlag = (auth) => {
             MongoClient.connect(url, (err, database) => {
                 if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-                const db = database.db('OtaWilma');
+                const db = database.db('otawilma');
 
                 const query = { username: auth.username }
                 const values = { $set: { 'public': true } }

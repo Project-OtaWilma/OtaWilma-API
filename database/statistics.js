@@ -14,7 +14,7 @@ const getTotalUsers = () => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
 
             db.collection('user-schema').countDocuments()
             .then(num => {

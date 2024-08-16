@@ -20,7 +20,7 @@ const appendPlanned = (auth, code) => {
                         MongoClient.connect(url, (err, database) => {
                             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
                 
-                            const db = database.db('OtaWilma');
+                            const db = database.db('otawilma');
                             const query = {
                                 username: auth.username,
                             };
@@ -62,7 +62,7 @@ const removePlanned = (auth, code) => {
                         MongoClient.connect(url, (err, database) => {
                             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
                 
-                            const db = database.db('OtaWilma');
+                            const db = database.db('otawilma');
                             const query = {
                                 username: auth.username,
                             };
@@ -96,7 +96,7 @@ const getMyPlan = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = {
                 username: auth.username
             };
@@ -122,7 +122,7 @@ const getAccessList = (auth) => {
         MongoClient.connect(url, (err, database) => {
             if (err) return reject({ err: 'Failed to connect to database', status: 500 });
 
-            const db = database.db('OtaWilma');
+            const db = database.db('otawilma');
             const query = {
                 'access-list': auth.username
             };
