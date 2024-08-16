@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const { user, password, host, port } = require('../secret.json');
+const { user, password, host, port, authServer } = require('../secret.json');
 const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
 const {} = require('./authentication');
@@ -11,8 +11,7 @@ const { generateHash } = require('./utility');
 const utility = require('./utility');
 const { resolve } = require('path');
 
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
-//const url = `mongodb://127.0.0.1:27017`;
+const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT&authSource=${authServer}`;
 
 const wilmaAPI = 'https://wilma.otawilma.fi/api/';
 //const wilmaAPI = 'http://localhost:3001/api/';
