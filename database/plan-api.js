@@ -5,7 +5,7 @@ const { user, password, host, port, authServer } = require('../secret.json');
 const { config } = require('./user-schema');
 const { public } = require('./public-api');
 
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT&authSource=${authServer}`;
+const url = `mongodb://${user}:${password}@${host}:${port}/wilma/?authMechanism=DEFAULT&authSource=${authServer}`;
 
 const appendPlanned = (auth, code) => {
     return new Promise((resolve, reject) => {

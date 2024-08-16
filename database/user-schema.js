@@ -4,7 +4,7 @@ const { defaultConfig, defaultTheme } = require('./default.json');
 const { generate } = require('shortid');
 const {} = require('./authentication');
 
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT&authSource=${authServer}`;
+const url = `mongodb://${user}:${password}@${host}:${port}/wilma?authMechanism=DEFAULT&authSource=${authServer}`;
 //const url = `mongodb://127.0.0.1:27017`;
 
 const login = (auth) => {

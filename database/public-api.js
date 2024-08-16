@@ -11,10 +11,9 @@ const { generateHash } = require('./utility');
 const utility = require('./utility');
 const { resolve } = require('path');
 
-const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT&authSource=${authServer}`;
+const url = `mongodb://${user}:${password}@${host}:${port}/wilma?authMechanism=DEFAULT&authSource=${authServer}`;
 
 const wilmaAPI = 'https://wilma.otawilma.fi/api/';
-//const wilmaAPI = 'http://localhost:3001/api/';
 
 const currentTray = '2024-2025(Otaniemen lukio, Espoo)'
 
