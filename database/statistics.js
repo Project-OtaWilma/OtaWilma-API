@@ -18,7 +18,6 @@ const getTotalUsers = () => {
 
             db.collection('user-schema').countDocuments()
             .then(num => {
-                console.log(num);
                 return resolve({ totalUsers: num });
             })
             .catch(err => {
