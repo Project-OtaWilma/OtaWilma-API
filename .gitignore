@@ -2,7 +2,7 @@
 node_modules
 
 #authentication
-/database/secret.json
+secret.json
 
 #tools used to manage MongoDB database
 /tools.js

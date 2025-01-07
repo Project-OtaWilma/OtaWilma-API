@@ -10,7 +10,7 @@ const signToken = (payload = {}) => {
 
 const validateToken = (req, res) => {
     return new Promise((resolve, reject) => {
-        const a = ['Wilma2SID', 'StudentID', 'username', 'iat'];
+        const a = ['Wilma2SID', 'StudentID', 'username', 'iat', 'isTeacher'];
         const token = req.headers.token;
 
         if (!token) {
