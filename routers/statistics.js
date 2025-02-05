@@ -24,7 +24,7 @@ router.get('/metrics', limiter.create, async (req, res) => {
 
     statistics.resolveWilmaResponsetime()
     .then(data => {
-        return res.send(`
+        return res.setHeader('Content-Type', 'text/plain; version=0.0.4; charset=utf-8').send(`
 # HELP wilma_response_time_ms Wilma's current response time
 # TYPE wilma_response_time_ms gauge
 wilma_response_time_ms ${data}
