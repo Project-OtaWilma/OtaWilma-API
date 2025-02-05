@@ -8,7 +8,7 @@ const authentication = require('../database/authentication');
 const limiter = require('./rate-limit');
 const { statistics }= require('../database/statistics');
 
-router.get('/statistics/users', limiter.create, async (req, res) => {
+router.get('/api/statistics/users', limiter.create, async (req, res) => {
 
     statistics.getTotalUsers()
     .then(data => {
@@ -20,6 +20,21 @@ router.get('/statistics/users', limiter.create, async (req, res) => {
     
 });
 
+router.get('/metrics', limiter.create, async (req, res) => {
+
+    statistics.resolveWilmaResponsetime()
+    .then(data => {
+        return res.send(`
+# HELP wilma_response_time_ms Wilma's current response time
+# TYPE wilma_response_time_ms gauge
+wilma_response_time_ms ${data}
+        `)
+    })
+    .catch(err => {
+        return res.status(err.status ?? 500).json(err);
+    })
+    
+});
 
 
 

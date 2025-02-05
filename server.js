@@ -24,9 +24,9 @@ app.use(cors());
 app.use('/api', sessions, limiter.standard);
 app.use('/api', themes, limiter.standard);
 app.use('/api', public, limiter.standard);
-app.use('/api', statistics);
+app.use('/', statistics);
 
-// PORT
+PORT
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}...`);
     console.log(`MongoDB connection on: ${url}`)
